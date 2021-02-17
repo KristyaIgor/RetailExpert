@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="md.intelectsoft.quickpos">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <application
+        android:name=".utils.POSApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher_new_version"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_new_version_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MyRetail"
+        android:usesCleartextTraffic="true">
+
+        <activity android:name=".tabledMode.activity.AuthTabledActivity" android:configChanges="locale"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".tabledMode.activity.ShiftsTabledActivity" android:configChanges="locale"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".tabledMode.activity.HistoryTabledActivity" android:configChanges="locale"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".tabledMode.activity.ReportsTabledActivity" android:configChanges="locale"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".tabledMode.activity.MainTabledActivity" android:configChanges="locale"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".tabledMode.activity.FinancialRepTabledActivity" android:configChanges="locale"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".tabledMode.activity.SettingsTabledActivity" android:configChanges="locale"
+            android:screenOrientation="landscape"/>
+
+
+        <activity android:name=".phoneMode.activity.ScanActivity"/>
+
+        <activity
+            android:name=".phoneMode.activity.SalesActivity"
+            android:label="@string/title_activity_sales"
+            android:theme="@style/Theme.MyRetail.NoActionBar" />
+        <activity
+            android:name=".phoneMode.activity.AuthorizeActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
+    </application>
+
+</manifest>

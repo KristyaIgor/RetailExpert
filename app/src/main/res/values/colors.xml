@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="green_splash">#34D5B6</color>
+    <color name="red" >#ed0909</color>
+    <color name="gray_stroke">#676767</color>
+    <color name="green">#009688</color>
+    <color name="blueItem">#545D6E</color>
+
+    <!--    Search view colors-->
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+
+<!--    Tabled color-->
+    <color name="toolbar_color">#4C4E51</color>
+    <color name="form_loginColor">#616E83</color>
+    <color name="header_list">#F2F3F3</color>
+    <color name="other_inactive">#2CACABAB</color>
+    <color name="btnPay">#d40404</color>
+    <color name="blue_color">#2E3746</color>
+    <color name="list_bills_appbar">#FCFCFC</color>
+    <color name="colorCaroDark">#944E59</color>
+    <color name="tab_background">#FAFAFA</color>
+    <color name="devider_main">#2D000000</color>
+    <color name="divider_background">#8f8f8f</color>
+    <color name="orange">#FBB03B</color>
+</resources>

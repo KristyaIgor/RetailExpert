@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="350dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="12dp"
+        android:text="Choose Payment Type"
+        android:textColor="@color/green"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/green"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+    <View
+        android:id="@+id/btnCardType"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintBottom_toTopOf="@id/btnQRType"
+        />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/bank_card"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintLeft_toLeftOf="@id/btnCardType"
+        app:layout_constraintRight_toRightOf="@id/btnCardType"
+        app:layout_constraintTop_toTopOf="@id/btnCardType" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Card Purchase"
+        app:layout_constraintBottom_toBottomOf="@id/btnCardType"
+        app:layout_constraintLeft_toLeftOf="@id/btnCardType"
+        app:layout_constraintRight_toRightOf="@id/btnCardType"
+        android:textSize="16sp"
+        android:layout_marginBottom="10dp"
+        />
+    <View
+        android:id="@+id/btnQRType"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnCardType"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="@id/btnQRType"
+        app:layout_constraintLeft_toLeftOf="@id/btnQRType"
+        app:layout_constraintRight_toRightOf="@id/btnQRType"
+        android:src="@mipmap/bank_qr"
+        android:layout_marginTop="10dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QR Purchase"
+        app:layout_constraintBottom_toBottomOf="@id/btnQRType"
+        app:layout_constraintLeft_toLeftOf="@id/btnQRType"
+        app:layout_constraintRight_toRightOf="@id/btnQRType"
+        android:textSize="16sp"
+        android:layout_marginBottom="10dp"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

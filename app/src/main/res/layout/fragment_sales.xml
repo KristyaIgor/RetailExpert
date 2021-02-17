@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".phoneMode.ui.sales.SalesFragment">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_pay_bill"
+        style="@style/Widget.MaterialComponents.GreenButtonCornersLeft"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"
+        android:text="New sale"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/mtrbtn_pay_cart" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mtrbtn_pay_cart"
+        style="@style/Widget.MaterialComponents.GreenButtonCornersRight"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:text="No items = 0.00 MDL"
+        android:textAllCaps="false"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/btn_pay_bill" />
+
+    <md.intelectsoft.quickpos.utils.SearchView
+        android:id="@+id/searchProducts"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:translationZ="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageScanBarcode"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="16dp"
+        android:padding="4dp"
+        android:src="@drawable/scan_barcode"
+        app:layout_constraintBottom_toBottomOf="@+id/imageChangeGridColumns"
+        app:layout_constraintEnd_toStartOf="@+id/imageChangeGridColumns"
+        app:layout_constraintTop_toTopOf="@+id/imageChangeGridColumns" />
+
+    <GridView
+        android:id="@+id/gridProducts"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:horizontalSpacing="5dp"
+        android:numColumns="3"
+        android:verticalSpacing="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/mtrbtn_pay_cart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchProducts"
+        tools:listitem="@layout/item_grid_multi_columns" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="36dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/background_quick_quantity"
+        android:gravity="center"
+        android:padding="4dp"
+        android:text="x 1"
+        android:textColor="@color/gray_stroke"
+        app:layout_constraintBottom_toBottomOf="@+id/imageChangeGridColumns"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageChangeGridColumns" />
+
+    <ImageView
+        android:id="@+id/imageChangeGridColumns"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:padding="4dp"
+
+        app:layout_constraintEnd_toStartOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_grid_black_24dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
