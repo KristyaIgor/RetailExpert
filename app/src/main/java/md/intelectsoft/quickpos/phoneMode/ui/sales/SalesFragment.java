@@ -90,6 +90,8 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
     private boolean shiftOpenButtonPay;
     private boolean shiftClosedButtonPay = false;
 
+    //only add branch and try open shift
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         salesViewModel = new ViewModelProvider(this).get(SalesViewModel.class);
 
@@ -169,7 +171,7 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
 
         gridViewProducts.setOnItemLongClickListener((parent, view, position, id) -> {
             Dialog tedsxt = new Dialog(context);
-            Log.e("TAG", "onCreateView: " + adapter.getItem(position).getName() );
+            Log.e("TAG", "onCreateView: " + adapter.getItem(position).getName());
             return true;
         });
 
