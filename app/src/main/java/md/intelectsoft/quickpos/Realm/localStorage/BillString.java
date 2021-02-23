@@ -13,25 +13,28 @@ public class BillString extends RealmObject {
     @Required
     private String id;
     @Required
-    private String assortmentExternID;
+    private String assortmentId;
     private String assortmentFullName;
+    private int cpvCode;
     private boolean allowNonInteger;
     private boolean allowDiscounts;
     @Required
-    private String createBy;
+    private String userId;
     private long createDate;
     private String promoLineID;
     private String priceLineID;
     private double quantity;
-    private double price;
+    private double basePrice;
     private double priceWithDiscount;
     private double promoPrice;
+    private double price;
     private double sum;
     private double sumWithDiscount;
-    private double vat;
+    private int vatCode;
+    private double vatValue;
     private String barcode;
     private boolean isDeleted;
-    private long deletionDate;
+    private long deletedDate;
     private String deleteBy;
     private boolean expanded;
 
@@ -51,12 +54,12 @@ public class BillString extends RealmObject {
         this.id = id;
     }
 
-    public String getAssortmentExternID() {
-        return assortmentExternID;
+    public String getAssortmentId() {
+        return assortmentId;
     }
 
-    public void setAssortmentExternID(String assortmentExternID) {
-        this.assortmentExternID = assortmentExternID;
+    public void setAssortmentId(String assortmentId) {
+        this.assortmentId = assortmentId;
     }
 
     public String getAssortmentFullName() {
@@ -83,12 +86,12 @@ public class BillString extends RealmObject {
         this.allowDiscounts = allowDiscounts;
     }
 
-    public String getCreateBy() {
-        return createBy;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public long getCreateDate() {
@@ -123,12 +126,12 @@ public class BillString extends RealmObject {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
-        return price;
+    public double getBasePrice() {
+        return basePrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setBasePrice(double basePrice) {
+        this.basePrice = basePrice;
     }
 
     public double getPriceWithDiscount() {
@@ -163,12 +166,12 @@ public class BillString extends RealmObject {
         this.sumWithDiscount = sumWithDiscount;
     }
 
-    public double getVat() {
-        return vat;
+    public double getVatValue() {
+        return vatValue;
     }
 
-    public void setVat(double vat) {
-        this.vat = vat;
+    public void setVatValue(double vatValue) {
+        this.vatValue = vatValue;
     }
 
     public String getBarcode() {
@@ -187,12 +190,12 @@ public class BillString extends RealmObject {
         isDeleted = deleted;
     }
 
-    public long getDeletionDate() {
-        return deletionDate;
+    public long getDeletedDate() {
+        return deletedDate;
     }
 
-    public void setDeletionDate(long deletionDate) {
-        this.deletionDate = deletionDate;
+    public void setDeletedDate(long deletedDate) {
+        this.deletedDate = deletedDate;
     }
 
     public String getDeleteBy() {
@@ -209,5 +212,29 @@ public class BillString extends RealmObject {
 
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
+    }
+
+    public int getCpvCode() {
+        return cpvCode;
+    }
+
+    public void setCpvCode(int cpvCode) {
+        this.cpvCode = cpvCode;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getVatCode() {
+        return vatCode;
+    }
+
+    public void setVatCode(int vatCode) {
+        this.vatCode = vatCode;
     }
 }

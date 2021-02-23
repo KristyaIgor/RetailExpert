@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -41,12 +42,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
-import io.realm.Case;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
+import io.realm.RealmList;
 import md.intelectsoft.quickpos.R;
 import md.intelectsoft.quickpos.Realm.localStorage.AssortmentRealm;
+import md.intelectsoft.quickpos.Realm.localStorage.BillString;
 import md.intelectsoft.quickpos.Realm.localStorage.History;
 import md.intelectsoft.quickpos.Realm.localStorage.Shift;
 import md.intelectsoft.quickpos.phoneMode.activity.ScanActivity;
@@ -59,7 +58,6 @@ import md.intelectsoft.quickpos.utils.SearchView;
 import md.intelectsoft.quickpos.phoneMode.adapters.AssortmentListGridAdapter;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.SEARCH_SERVICE;
 
 public class SalesFragment extends Fragment  implements IOnBackPressed {
 
@@ -71,6 +69,7 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
     private Context context;
     private SearchView searchView;
     private MaterialButton buttonPay;
+    private ImageButton buttonBackFolder;
 
     private String previousParentId;
 
@@ -90,7 +89,7 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
     private boolean shiftOpenButtonPay;
     private boolean shiftClosedButtonPay = false;
 
-    //only add branch and try open shift
+    String idShift = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         salesViewModel = new ViewModelProvider(this).get(SalesViewModel.class);
@@ -103,6 +102,7 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
         changeColumns = root.findViewById(R.id.imageChangeGridColumns);
         searchView = root.findViewById(R.id.searchProducts);
         buttonPay = root.findViewById(R.id.mtrbtn_pay_cart);
+        buttonBackFolder = root.findViewById(R.id.imageButtonBackToFolderUp);
 
         simpleDateFormatMD = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy");
         timeZoneMD = TimeZone.getTimeZone("Europe/Chisinau");
@@ -128,11 +128,21 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
             gridViewProducts.setAdapter(adapter);
 
             adapter.setAssortmentItemActionListener(imageView -> {
-                if (imageView != null && !shiftOpenButtonPay)
-                    makeFlyAnimation(imageView);
-                else
-                    Toast.makeText(context, "Shift is not valid!", Toast.LENGTH_SHORT).show();
+                if (imageView != null){
+                    if(!shiftOpenButtonPay){
+                        if(!shiftClosedButtonPay) makeFlyAnimation(imageView);
+                        else Toast.makeText(context, "Shift is expired!", Toast.LENGTH_SHORT).show();
+                    } else Toast.makeText(context, "Shift is not open!", Toast.LENGTH_SHORT).show();
+                }
             });
+        });
+
+        salesViewModel.getBillEntry().observe(getViewLifecycleOwner(), bill -> {
+            RealmList<BillString> line = bill.getBillStrings();
+            int countLineInBill = line != null ? line.size() : 0;
+            double sum = bill.getTotalDiscount();
+
+            buttonPay.setText(countLineInBill + " items = " + sum);
         });
 
         salesViewModel.getShift().observe(getViewLifecycleOwner(), shift -> {
@@ -145,12 +155,19 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
             else{
                 if(!shift.isClosed() && new Date().getTime() > shift.getNeedClose() && shift.getNeedClose() != 0){
                     shiftClosedButtonPay = true;
+
+                    idShift = shift.getId();
+
+                    buttonPay.setText(R.string.text_close_shift);
+                    buttonPay.setBackgroundColor(context.getColor(R.color.btnPay));
+                    buttonPay.setTextColor(Color.WHITE);
+
                     new MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
                             .setTitle(R.string.message_attention)
                             .setMessage(R.string.message_shift_expired_want_close)
                             .setCancelable(false)
                             .setPositiveButton(R.string.btn_yes, (dialogInterface, i) -> {
-//                                closeShift();
+                                closeShift(shift);
                             })
                             .setNegativeButton(R.string.btn_no,((dialogInterface, i) -> {
                                 dialogInterface.dismiss();
@@ -165,8 +182,18 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
         gridViewProducts.setOnItemClickListener((parent, view, position, id) -> {
             AssortmentRealm assortmentRealm = adapter.getItem(position);
             previousParentId = assortmentRealm.getParentID();
-            if (assortmentRealm.isFolder()) salesViewModel.findAssortment(assortmentRealm.getId());
+            if (assortmentRealm.isFolder()){
+                buttonBackFolder.setVisibility(View.VISIBLE);
+                salesViewModel.findAssortment(assortmentRealm.getId());
+            }
             else addToCart(assortmentRealm);
+        });
+
+        buttonBackFolder.setOnClickListener(v -> {
+            if(previousParentId.equals("00000000-0000-0000-0000-000000000000")){
+                buttonBackFolder.setVisibility(View.GONE);
+            }
+            salesViewModel.findAssortment(previousParentId);
         });
 
         gridViewProducts.setOnItemLongClickListener((parent, view, position, id) -> {
@@ -251,8 +278,8 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
 
                             Shift shiftEntry = new Shift();
                             shiftEntry.setName("SHF " + simpleDateFormatMD.format(opened_new_shift));
-                            shiftEntry.setWorkPlaceId(SPFHelp.getInstance().getString("WorkPlaceID", null));
-                            shiftEntry.setWorkPlaceName(SPFHelp.getInstance().getString("WorkPlaceName", null));
+                            shiftEntry.setWorkPlaceId(SPFHelp.getInstance().getString("WorkplaceId", null));
+                            shiftEntry.setWorkPlaceName(SPFHelp.getInstance().getString("WorkplaceName", null));
                             shiftEntry.setAuthor(POSApplication.getApplication().getUserId());
                             shiftEntry.setAuthorName(POSApplication.getApplication().getUser().getFullName());
                             shiftEntry.setStartDate(new Date().getTime());
@@ -284,12 +311,36 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
 
                         .show();
             }
-            else{
+            else if(shiftClosedButtonPay){
 
             }
         });
 
         return root;
+    }
+
+    private void closeShift(Shift shift) {
+
+        long close = new Date().getTime();
+        shift.setClosedBy(POSApplication.getApplication().getUserId());
+        shift.setEndDate(close);
+        shift.setClosed(true);
+        shift.setClosedByName(POSApplication.getApplication().getUser().getFullName());
+        shift.setSended(false);
+
+        int result = salesViewModel.updateShiftInfo(shift);
+        if(result > 0){
+            new MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
+                    .setTitle(R.string.message_attention)
+                    .setMessage(getString(R.string.message_cannot_close_shift_bill_active) + result + getString(R.string.message_open_bills))
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.btn_ok, (dialogInterface, i) -> {
+                        dialogInterface.dismiss();
+                        buttonPay.setEnabled(true);
+                    })
+                    .show();
+        }
+
     }
 
     private void startTimerSearchText(final String newText) {
@@ -451,7 +502,7 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
                 //addItemToCart();
                 if(assortmentClicked != null){
                     Toast.makeText(context, assortmentClicked.getName() + " added...", Toast.LENGTH_SHORT).show();
-                    addToCart(assortmentClicked);
+                    salesViewModel.addProductToBill(assortmentClicked, 1);
                 }
             }
 

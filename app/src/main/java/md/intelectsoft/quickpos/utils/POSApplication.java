@@ -111,7 +111,7 @@ public class POSApplication extends Application {
         ToastUtil.init(getApplicationContext());
         Realm.init(this);
 
-        RealmConfiguration configuration = new RealmConfiguration.Builder().name("quickpos.realm").schemaVersion(1).migration(new RealmMigrations()).build();
+        RealmConfiguration configuration = new RealmConfiguration.Builder().name("retail.realm").schemaVersion(1).migration(new RealmMigrations()).allowWritesOnUiThread(true).build();
         Realm.setDefaultConfiguration(configuration);
         Realm.getInstance(configuration);
 
@@ -327,7 +327,7 @@ public class POSApplication extends Application {
                     String name = billStringEntry.getAssortmentFullName();
                     if(name.length() > 25)
                         name = name.substring(0,24);
-                    String taxCod = String.format("%.0f", billStringEntry.getVat());
+                    String taxCod = String.format("%.0f", billStringEntry.getVatValue());
                     String codeVat = "1";
                     if(taxCod.equals("20"))
                         codeVat = "1";
@@ -335,7 +335,7 @@ public class POSApplication extends Application {
                         codeVat = "2";
                     else
                         codeVat = "3";
-                    String price = String.format("%.2f", billStringEntry.getPrice()).replace(",",".");
+                    String price = String.format("%.2f", billStringEntry.getBasePrice()).replace(",",".");
                     String count = String.format("%.2f", billStringEntry.getQuantity()).replace(",",".");
 
                     double discVal = billStringEntry.getSum() - billStringEntry.getSumWithDiscount();
@@ -419,7 +419,7 @@ public class POSApplication extends Application {
                         String name = billStringEntry.getAssortmentFullName();
                         if(name.length() > 25)
                             name = name.substring(0,24);
-                        String taxCod = String.format("%.0f", billStringEntry.getVat());
+                        String taxCod = String.format("%.0f", billStringEntry.getVatValue());
                         String codeVat = "1";
                         if(taxCod.equals("20"))
                             codeVat = "1";
@@ -427,7 +427,7 @@ public class POSApplication extends Application {
                             codeVat = "2";
                         else
                             codeVat = "3";
-                        String price = String.format("%.2f", billStringEntry.getPrice()).replace(",",".");
+                        String price = String.format("%.2f", billStringEntry.getBasePrice()).replace(",",".");
                         String count = String.format("%.2f", billStringEntry.getQuantity()).replace(",",".");
 
                         double discVal = billStringEntry.getSum() - billStringEntry.getSumWithDiscount();
@@ -537,7 +537,7 @@ public class POSApplication extends Application {
         for(BillString billStringEntry: billString){
             BillLineFiscalService billLineFiscalService = new BillLineFiscalService();
 
-            String taxCod = String.format("%.0f", billStringEntry.getVat());
+            String taxCod = String.format("%.0f", billStringEntry.getVatValue());
             String codeVat = "1";
             if(taxCod.equals("20"))
                 codeVat = "1";
@@ -549,8 +549,8 @@ public class POSApplication extends Application {
             billLineFiscalService.setAmount(billStringEntry.getQuantity());
             billLineFiscalService.setName(billStringEntry.getAssortmentFullName());
             billLineFiscalService.setPrice(billStringEntry.getPriceWithDiscount());
-            if(billStringEntry.getPrice() != billStringEntry.getPriceWithDiscount()){
-                billLineFiscalService.setDiscount(billStringEntry.getPrice() - billStringEntry.getPriceWithDiscount());
+            if(billStringEntry.getBasePrice() != billStringEntry.getPriceWithDiscount()){
+                billLineFiscalService.setDiscount(billStringEntry.getBasePrice() - billStringEntry.getPriceWithDiscount());
             }
             billLineFiscalService.setVAT(codeVat);
 
@@ -835,7 +835,7 @@ public class POSApplication extends Application {
                 BillLine saveBillLine = new BillLine();
 
                 saveBillLine.setCount(billString.getQuantity());
-                saveBillLine.setCreatedByID(billString.getCreateBy());
+                saveBillLine.setCreatedByID(billString.getUserId());
 
                 Date dateCreateLine = new Date(billString.getCreateDate());
                 String createDateLine = "/Date(" + String.valueOf(billString.getCreateDate()) + format.format(dateCreateLine) + ")/";
@@ -843,17 +843,17 @@ public class POSApplication extends Application {
 
                 saveBillLine.setDeletedByID(billString.getDeleteBy());
 
-                Date dateDelet = new Date(billString.getDeletionDate());
-                String deletingDate = "/Date(" + String.valueOf(billString.getDeletionDate()) + format.format(dateDelet) + ")/";
+                Date dateDelet = new Date(billString.getDeletedDate());
+                String deletingDate = "/Date(" + String.valueOf(billString.getDeletedDate()) + format.format(dateDelet) + ")/";
                 saveBillLine.setDeletionDate(deletingDate);
 
                 saveBillLine.setIsDeleted(billString.isDeleted());
-                saveBillLine.setPrice(billString.getPrice());
+                saveBillLine.setPrice(billString.getBasePrice());
                 saveBillLine.setPriceLineID(billString.getPriceLineID());
                 saveBillLine.setPromoPrice(billString.getPromoPrice());
                 saveBillLine.setSum(billString.getSum());
                 saveBillLine.setSumWithDiscount(billString.getSumWithDiscount());
-                saveBillLine.setVATQuote(billString.getVat());
+                saveBillLine.setVATQuote(billString.getVatValue());
 
                 listLines.add(saveBillLine);
             }
@@ -875,7 +875,7 @@ public class POSApplication extends Application {
             }
 
             saveBill.setNumber(bill.getShiftReceiptNumSoftware());
-            saveBill.setOpenedByID(bill.getAuthor());
+            saveBill.setOpenedByID(bill.getUserId());
 
             saveBill.setLines(listLines);
             saveBill.setPayments(listBillPayment);

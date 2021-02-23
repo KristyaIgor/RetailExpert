@@ -86,7 +86,7 @@ public class SalesActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_sales, R.id.nav_orders, R.id.nav_products).setDrawerLayout(drawer).build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_sales, R.id.nav_orders, R.id.nav_products, R.id.nav_shifts).setDrawerLayout(drawer).build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
@@ -232,7 +232,7 @@ public class SalesActivity extends AppCompatActivity {
                             assortmentRealm.setEnableSaleTimeRange(assortment.getEnableSaleTimeRange());
                             assortmentRealm.setMarking(assortment.getMarking());
                             assortmentRealm.setParentID(assortment.getParentID());
-                            assortmentRealm.setPrice(assortment.getPrice());
+                            assortmentRealm.setBasePrice(assortment.getPrice());
                             assortmentRealm.setPriceLineId(assortment.getPriceLineId());
                             assortmentRealm.setShortName(assortment.getShortName());
                             assortmentRealm.setVat(assortment.getVAT());
@@ -310,6 +310,8 @@ public class SalesActivity extends AppCompatActivity {
                         for(User user : users) {
                             if(user.getPassword() != null && user.getUserName() != null)
                                 if (user.getPassword().equals(passwordHashed) && user.getUserName().equals(login)) {
+                                    if(SPFHelp.getInstance().getBoolean("KeepMeSigned", false))
+                                        SPFHelp.getInstance().putString("LastUser", user.getId());
                                     POSApplication.getApplication().setUser(user);
                                 }
                            mRealm.insert(user); 
@@ -391,6 +393,9 @@ public class SalesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        User user = mRealm.where(User.class).equalTo("id", SPFHelp.getInstance().getString("LastUser", "")).findFirst();
+        POSApplication.getApplication().setUser(user);
+
     }
 
     private void onFinishApp(String text){

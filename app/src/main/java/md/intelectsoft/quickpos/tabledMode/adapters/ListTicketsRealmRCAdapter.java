@@ -95,7 +95,7 @@ public class ListTicketsRealmRCAdapter extends RealmRecyclerViewAdapter<Bill, Li
             String name = "Shift " + shiftName + " from " + simpleShiftDateFormatMD.format(shiftDate) + " - " + "Check No: " + item.getShiftReceiptNumSoftware();
             nameShiftBill.setText(name);
 
-            total.setText(String.valueOf(item.getSum()) + " MDL");
+            total.setText(String.valueOf(item.getTotalSum()) + " MDL");
 
             ListContentTicketsRealmRCAdapter adapter = new ListContentTicketsRealmRCAdapter(item.getBillStrings(),true);
             ticketContent.setAdapter(adapter);
@@ -149,7 +149,7 @@ public class ListTicketsRealmRCAdapter extends RealmRecyclerViewAdapter<Bill, Li
                 closedDate.setText(simpleDateFormatMD.format(bill.getCloseDate()));
             else
                 closedDate.setText("-");
-            author.setText(bill.getAuthorName());
+            author.setText(bill.getUserName());
             client.setText("");
             if(bill.getBillPaymentTypes() != null && bill.getBillPaymentTypes().size() > 0){
                 if(bill.getBillPaymentTypes().size() == 1){
@@ -161,8 +161,8 @@ public class ListTicketsRealmRCAdapter extends RealmRecyclerViewAdapter<Bill, Li
             else{
                 payment.setText("-");
             }
-            discount.setText(String.valueOf(bill.getSum() - bill.getSumWithDiscount()));
-            sum.setText(String.valueOf(bill.getSum()));
+            discount.setText(String.valueOf(bill.getTotalSum() - bill.getTotalDiscount()));
+            sum.setText(String.valueOf(bill.getTotalSum()));
             state.setText(String.valueOf(bill.isSynchronized()));
 
         }

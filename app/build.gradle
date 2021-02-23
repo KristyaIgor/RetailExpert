@@ -54,6 +54,7 @@ dependencies {
     implementation files('libs\\bit-lib4j-1.4.12.jar')
     implementation files('libs\\commons-collections4-4.0.jar')
     implementation files('libs\\commons-lang3-3.0.jar')
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

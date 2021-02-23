@@ -1195,7 +1195,7 @@ public class MainTabledActivity extends AppCompatActivity {
         });
         btnPayBill.setOnClickListener(view ->{
             openedBillId = bill.getId();
-            paymentBill(bill.getSumWithDiscount());
+            paymentBill(bill.getTotalDiscount());
         });
         closeDrawer.setOnClickListener(view -> drawer.closeDrawer(GravityCompat.END));
 
@@ -1211,9 +1211,9 @@ public class MainTabledActivity extends AppCompatActivity {
             BillStringInBillRealmListAdapter adapter = new BillStringInBillRealmListAdapter(results[0]);
             listContent.setAdapter(adapter);
         }
-        totalBill.setText(String.format("%.2f",bill.getSumWithDiscount()).replace(",","."));
+        totalBill.setText(String.format("%.2f",bill.getTotalDiscount()).replace(",","."));
         clientBill.setText(bill.getDiscountCardNumber());
-        discount.setText(String.format("%.2f", bill.getSum() - bill.getSumWithDiscount()).replace(",","."));
+        discount.setText(String.format("%.2f", bill.getTotalSum() - bill.getTotalDiscount()).replace(",","."));
     }
 
 
@@ -1616,17 +1616,17 @@ public class MainTabledActivity extends AppCompatActivity {
         mRealm.executeTransaction(realm -> {
 
             billString.setDeleted(true);
-            billString.setDeletionDate(new Date().getTime());
+            billString.setDeletedDate(new Date().getTime());
             billString.setDeleteBy(POSApplication.getApplication().getUserId());
 
             Bill billEntryRealmResults = realm.where(Bill.class).equalTo("id", openedBillId).findFirst();
             if (billEntryRealmResults != null) {
-                billEntryRealmResults.setSum(billEntryRealmResults.getSum()  - (billString.getPrice() * billString.getQuantity()));
-                billEntryRealmResults.setSumWithDiscount(billEntryRealmResults.getSumWithDiscount() - (billString.getPriceWithDiscount() * billString.getQuantity()));
+                billEntryRealmResults.setTotalSum(billEntryRealmResults.getTotalSum()  - (billString.getBasePrice() * billString.getQuantity()));
+                billEntryRealmResults.setTotalDiscount(billEntryRealmResults.getTotalDiscount() - (billString.getPriceWithDiscount() * billString.getQuantity()));
 
-                btnPay.setText("MDL " + String.format("%.2f", billEntryRealmResults.getSumWithDiscount()).replace(",","."));
-                tvDiscountBill.setText(String.format("%.2f",billEntryRealmResults.getSum() - billEntryRealmResults.getSumWithDiscount()).replace(",","."));
-                tvSubTotalBill.setText(String.format("%.2f", billEntryRealmResults.getSum()).replace(",","."));
+                btnPay.setText("MDL " + String.format("%.2f", billEntryRealmResults.getTotalDiscount()).replace(",","."));
+                tvDiscountBill.setText(String.format("%.2f",billEntryRealmResults.getTotalSum() - billEntryRealmResults.getTotalDiscount()).replace(",","."));
+                tvSubTotalBill.setText(String.format("%.2f", billEntryRealmResults.getTotalSum()).replace(",","."));
             }
             History history = new History();
             history.setDate(new Date().getTime());
@@ -1666,12 +1666,12 @@ public class MainTabledActivity extends AppCompatActivity {
 
             Bill billEntryRealmResults = realm.where(Bill.class).equalTo("id", openedBillId).findFirst();
             if (billEntryRealmResults != null) {
-                billEntryRealmResults.setSum(sumTotal);
-                billEntryRealmResults.setSumWithDiscount(sumWithDisc);
+                billEntryRealmResults.setTotalSum(sumTotal);
+                billEntryRealmResults.setTotalDiscount(sumWithDisc);
 
-                btnPay.setText("MDL " + String.format("%.2f", billEntryRealmResults.getSumWithDiscount()).replace(",","."));
-                tvDiscountBill.setText(String.format("%.2f",billEntryRealmResults.getSum() - billEntryRealmResults.getSumWithDiscount()).replace(",","."));
-                tvSubTotalBill.setText(String.format("%.2f", billEntryRealmResults.getSum()).replace(",","."));
+                btnPay.setText("MDL " + String.format("%.2f", billEntryRealmResults.getTotalDiscount()).replace(",","."));
+                tvDiscountBill.setText(String.format("%.2f",billEntryRealmResults.getTotalSum() - billEntryRealmResults.getTotalDiscount()).replace(",","."));
+                tvSubTotalBill.setText(String.format("%.2f", billEntryRealmResults.getTotalSum()).replace(",","."));
             }
         });
     }
@@ -1704,10 +1704,10 @@ public class MainTabledActivity extends AppCompatActivity {
             bill.setId(uid);
             bill.setCreateDate(new Date().getTime());
             bill.setShiftReceiptNumSoftware(shift.getBillCounter() + 1);
-            bill.setAuthor(POSApplication.getApplication().getUser().getId());
-            bill.setAuthorName(POSApplication.getApplication().getUser().getFullName());
-            bill.setSumWithDiscount(0.0);
-            bill.setSum(0.0);
+            bill.setUserId(POSApplication.getApplication().getUser().getId());
+            bill.setUserName(POSApplication.getApplication().getUser().getFullName());
+            bill.setTotalDiscount(0.0);
+            bill.setTotalSum(0.0);
             bill.setState(0);
             bill.setShiftId(shift.getId());
             bill.setSynchronized(false);
@@ -1763,11 +1763,11 @@ public class MainTabledActivity extends AppCompatActivity {
         }
 
         if(openedBillId != null){
-            if(lastBillString != null && assortmentEntry.getId().equals(lastBillString.getAssortmentExternID()) ){
+            if(lastBillString != null && assortmentEntry.getId().equals(lastBillString.getAssortmentId()) ){
                 double sumBefore = lastBillString.getSum();
                 double sumWithDiscBefore = lastBillString.getSumWithDiscount();
                 double quantity = lastBillString.getQuantity() + count;
-                double sum = lastBillString.getPrice() * quantity;
+                double sum = lastBillString.getBasePrice() * quantity;
                 double sumWithDisc = lastBillString.getPriceWithDiscount() * quantity;
                 String id = lastBillString.getId();
 
@@ -1781,14 +1781,14 @@ public class MainTabledActivity extends AppCompatActivity {
 
                     Bill billEntryRealmResults = realm.where(Bill.class).equalTo("id", openedBillId).findFirst();
                     if (billEntryRealmResults != null) {
-                        billEntryRealmResults.setSum(billEntryRealmResults.getSum() + (sum - sumBefore));
-                        billEntryRealmResults.setSumWithDiscount(billEntryRealmResults.getSumWithDiscount() + (sumWithDisc - sumWithDiscBefore));
+                        billEntryRealmResults.setTotalSum(billEntryRealmResults.getTotalSum() + (sum - sumBefore));
+                        billEntryRealmResults.setTotalDiscount(billEntryRealmResults.getTotalDiscount() + (sumWithDisc - sumWithDiscBefore));
                     }
                 });
             }
             else{
                 BillString billString = new BillString();
-                double priceWithDisc = assortmentEntry.getPrice();
+                double priceWithDisc = assortmentEntry.getBasePrice();
 
                 CheckedAssortmentItemToPromo assortmentItemToPromo = checkedAssortmentItemToPromo(assortmentEntry);
 
@@ -1797,23 +1797,23 @@ public class MainTabledActivity extends AppCompatActivity {
                     priceWithDisc = assortmentItemToPromo.getPromoPrice();
                 }
 
-                billString.setCreateBy(POSApplication.getApplication().getUser().getId());
-                billString.setAssortmentExternID(assortmentEntry.getId());
+                billString.setUserId(POSApplication.getApplication().getUser().getId());
+                billString.setAssortmentId(assortmentEntry.getId());
                 billString.setAssortmentFullName(assortmentEntry.getName());
                 billString.setBillID(openedBillId);
                 billString.setId(UUID.randomUUID().toString());
                 billString.setQuantity(count);
-                billString.setPrice(assortmentEntry.getPrice());
+                billString.setBasePrice(assortmentEntry.getBasePrice());
                 billString.setPriceLineID(assortmentEntry.getPriceLineId());
                 billString.setAllowNonInteger(assortmentEntry.isAllowNonInteger());
                 billString.setAllowDiscounts(assortmentEntry.isAllowDiscounts());
                 billString.setBarcode(barcode);
-                billString.setVat(assortmentEntry.getVat());
+                billString.setVatValue(assortmentEntry.getVat());
                 billString.setCreateDate(new Date().getTime());
                 billString.setDeleted(false);
                 billString.setPriceWithDiscount(priceWithDisc);
 
-                billString.setSum(assortmentEntry.getPrice() * count);
+                billString.setSum(assortmentEntry.getBasePrice() * count);
                 billString.setSumWithDiscount(priceWithDisc * count);
 
                 double finalPriceWithDisc = priceWithDisc;
@@ -1821,8 +1821,8 @@ public class MainTabledActivity extends AppCompatActivity {
 
                 Bill billEntryRealmResults = realm.where(Bill.class).equalTo("id", openedBillId).findFirst();
                 if (billEntryRealmResults != null) {
-                    billEntryRealmResults.setSum(billEntryRealmResults.getSum() + (assortmentEntry.getPrice() * count));
-                    billEntryRealmResults.setSumWithDiscount(billEntryRealmResults.getSumWithDiscount() + (finalPriceWithDisc * count));
+                    billEntryRealmResults.setTotalSum(billEntryRealmResults.getTotalSum() + (assortmentEntry.getBasePrice() * count));
+                    billEntryRealmResults.setTotalDiscount(billEntryRealmResults.getTotalDiscount() + (finalPriceWithDisc * count));
                     billEntryRealmResults.getBillStrings().add(billString);
                 }
                     createBillString[0] = true;
@@ -2063,9 +2063,9 @@ public class MainTabledActivity extends AppCompatActivity {
                 recyclerView.smoothScrollToPosition(0);
 
             if(bill[0] != null){
-                btnPay.setText("MDL " + String.format("%.2f", bill[0].getSumWithDiscount()).replace(",","."));
-                tvDiscountBill.setText(String.format("%.2f",bill[0].getSum() - bill[0].getSumWithDiscount()).replace(",","."));
-                tvSubTotalBill.setText(String.format("%.2f", bill[0].getSum()).replace(",","."));
+                btnPay.setText("MDL " + String.format("%.2f", bill[0].getTotalDiscount()).replace(",","."));
+                tvDiscountBill.setText(String.format("%.2f",bill[0].getTotalSum() - bill[0].getTotalDiscount()).replace(",","."));
+                tvSubTotalBill.setText(String.format("%.2f", bill[0].getTotalSum()).replace(",","."));
             }
             else{
                 btnPay.setText(context.getString(R.string.text_mdl_0));
@@ -3056,7 +3056,7 @@ public class MainTabledActivity extends AppCompatActivity {
                 CheckedAssortmentItemToPromo promo = checkedAssortmentItemToPromo(assortmentFind);
                 if (promo != null)
                     tvDiscountItem.setText("MDL " + String.format("%.2f", promo.getPromoPrice()).replace(",","."));
-                tvPriceItem.setText("MDL " + String.format("%.2f", assortmentFind.getPrice()).replace(",","."));
+                tvPriceItem.setText("MDL " + String.format("%.2f", assortmentFind.getBasePrice()).replace(",","."));
 
                 btn_add.setVisibility(View.VISIBLE);
                 btn_search.setVisibility(View.GONE);
@@ -3171,7 +3171,7 @@ public class MainTabledActivity extends AppCompatActivity {
                                 CheckedAssortmentItemToPromo promo = checkedAssortmentItemToPromo(assortmentFind);
                                 if (promo != null)
                                     tvDiscountItem.setText("MDL " + String.format("%.2f", promo.getPromoPrice()).replace(",", "."));
-                                tvPriceItem.setText("MDL " + String.format("%.2f", assortmentFind.getPrice()).replace(",", "."));
+                                tvPriceItem.setText("MDL " + String.format("%.2f", assortmentFind.getBasePrice()).replace(",", "."));
 
                                 btn_add.setVisibility(View.VISIBLE);
                                 btn_search.setVisibility(View.GONE);
@@ -3330,7 +3330,7 @@ public class MainTabledActivity extends AppCompatActivity {
                             ass.setEnableSaleTimeRange(assortmentServiceEntry.getEnableSaleTimeRange());
                             ass.setMarking(assortmentServiceEntry.getMarking());
                             ass.setParentID(assortmentServiceEntry.getParentID());
-                            ass.setPrice(assortmentServiceEntry.getPrice());
+                            ass.setBasePrice(assortmentServiceEntry.getPrice());
                             ass.setPriceLineId(assortmentServiceEntry.getPriceLineId());
                             ass.setShortName(assortmentServiceEntry.getShortName());
                             ass.setVat(assortmentServiceEntry.getVAT());

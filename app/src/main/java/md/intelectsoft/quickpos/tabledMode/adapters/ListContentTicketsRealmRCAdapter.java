@@ -73,7 +73,7 @@ public class ListContentTicketsRealmRCAdapter extends RealmRecyclerViewAdapter<B
         private void bind(BillString string) {
             name.setText(string.getAssortmentFullName());
             cnt.setText(String.valueOf(string.getQuantity()));
-            price.setText(String.valueOf(string.getPrice()));
+            price.setText(String.valueOf(string.getBasePrice()));
             sum.setText(String.valueOf(string.getSum()));
         }
     }

@@ -367,7 +367,7 @@ public class FragmentCompanyPage extends Fragment {
                             ass.setEnableSaleTimeRange(assortmentServiceEntry.getEnableSaleTimeRange());
                             ass.setMarking(assortmentServiceEntry.getMarking());
                             ass.setParentID(assortmentServiceEntry.getParentID());
-                            ass.setPrice(assortmentServiceEntry.getPrice());
+                            ass.setBasePrice(assortmentServiceEntry.getPrice());
                             ass.setPriceLineId(assortmentServiceEntry.getPriceLineId());
                             ass.setShortName(assortmentServiceEntry.getShortName());
                             ass.setVat(assortmentServiceEntry.getVAT());

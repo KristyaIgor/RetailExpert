@@ -55,7 +55,7 @@ public class BillStringInBillRealmListAdapter extends RealmBaseAdapter<BillStrin
             viewHolder.countString.setText(String.format("%.2f", item.getQuantity()).replace(",","."));
             viewHolder.priceString.setText(String.format("%.2f", item.getPriceWithDiscount()).replace(",","."));
             viewHolder.sumString.setText(String.format("%.2f", item.getSumWithDiscount()).replace(",","."));
-            if(item.getPriceWithDiscount() < item.getPrice())
+            if(item.getPriceWithDiscount() < item.getBasePrice())
                 viewHolder.priceString.setTextColor(Color.parseColor("#79BD60"));
         }
         return convertView;

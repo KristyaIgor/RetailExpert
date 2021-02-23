@@ -29,7 +29,9 @@
         <item name="android:insetRight">0dp</item>
         <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
         <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
-        <item name="android:stateListAnimator" ns2:ignore="NewApi">@animator/mtrl_btn_state_list_anim</item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">
+            @animator/mtrl_btn_state_list_anim
+        </item>
         <item name="cornerRadius">@null</item>
         <item name="elevation">@dimen/mtrl_btn_elevation</item>
         <item name="iconPadding">@dimen/mtrl_btn_icon_padding</item>
@@ -52,7 +54,9 @@
         <item name="android:insetRight">0dp</item>
         <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
         <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
-        <item name="android:stateListAnimator" ns2:ignore="NewApi">@animator/mtrl_btn_state_list_anim</item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">
+            @animator/mtrl_btn_state_list_anim
+        </item>
         <item name="strokeColor">@color/green</item>
         <item name="strokeWidth">2dp</item>
         <item name="elevation">@dimen/mtrl_btn_elevation</item>
@@ -62,6 +66,7 @@
         <item name="backgroundTint">@color/mtr_btn_green_tint</item>
         <item name="shapeAppearance">@style/MyShapeAppearanceLeftRounded</item>
     </style>
+
     <style name="Widget.MaterialComponents.GreenButtonCornersRight" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="enforceMaterialTheme">true</item>
         <item name="enforceTextAppearance">true</item>
@@ -75,7 +80,9 @@
         <item name="android:insetRight">0dp</item>
         <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
         <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
-        <item name="android:stateListAnimator" ns2:ignore="NewApi">@animator/mtrl_btn_state_list_anim</item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">
+            @animator/mtrl_btn_state_list_anim
+        </item>
         <item name="strokeColor">@color/green</item>
         <item name="strokeWidth">2dp</item>
         <item name="elevation">@dimen/mtrl_btn_elevation</item>
@@ -93,6 +100,7 @@
         <item name="cornerSizeTopLeft">0dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
+
     <style name="MyShapeAppearanceLeftRounded">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">0dp</item>
@@ -133,7 +141,9 @@
         <item name="android:insetRight">0dp</item>
         <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
         <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
-        <item name="android:stateListAnimator" ns2:ignore="NewApi">@animator/mtrl_btn_state_list_anim </item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">
+            @animator/mtrl_btn_state_list_anim
+        </item>
         <item name="cornerRadius">40dp</item>
         <item name="elevation">@dimen/mtrl_btn_elevation</item>
         <item name="iconPadding">@dimen/mtrl_btn_icon_padding</item>
@@ -156,7 +166,9 @@
         <item name="android:insetRight">0dp</item>
         <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
         <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
-        <item name="android:stateListAnimator" ns2:ignore="NewApi">@animator/mtrl_btn_state_list_anim</item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">
+            @animator/mtrl_btn_state_list_anim
+        </item>
         <item name="cornerRadius">0dp</item>
         <item name="elevation">0dp</item>
         <item name="iconPadding">@dimen/mtrl_btn_icon_padding</item>
@@ -179,7 +191,9 @@
         <item name="android:insetRight">0dp</item>
         <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
         <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
-        <item name="android:stateListAnimator" ns2:ignore="NewApi">@animator/mtrl_btn_state_list_anim</item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">
+            @animator/mtrl_btn_state_list_anim
+        </item>
         <item name="cornerRadius">@null</item>
         <item name="elevation">@dimen/mtrl_btn_elevation</item>
         <item name="iconPadding">@dimen/mtrl_btn_icon_padding</item>

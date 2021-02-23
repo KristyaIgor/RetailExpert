@@ -125,7 +125,7 @@ public class BillListRealmRCAdapter extends RealmRecyclerViewAdapter<Bill, BillL
         }
 
         private void bind(Bill bill) {
-            sum.setText("MDL " + String.format("%.2f", bill.getSumWithDiscount()));
+            sum.setText("MDL " + String.format("%.2f", bill.getTotalDiscount()));
             client.setText(bill.getDiscountCardNumber());
             payType.setText(bill.getDiscountCardId());
             numberBill.setText(String.valueOf(bill.getShiftReceiptNumSoftware()));

@@ -39,12 +39,12 @@
         android:id="@+id/searchProducts"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:translationZ="1dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageButtonBackToFolderUp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -97,5 +97,19 @@
         app:layout_constraintEnd_toStartOf="@+id/textView6"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_grid_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/imageButtonBackToFolderUp"
+        android:layout_width="45dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_icon_arrow_left"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/gridProducts"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -76,7 +76,7 @@ public class AssortmentListGridAdapter extends ArrayAdapter<AssortmentRealm> {
                 viewHolder.productImageCopy.setVisibility(View.INVISIBLE);
                 viewHolder.productName2.setVisibility(View.VISIBLE);
                 viewHolder.productName2.setText(item.getName());
-                viewHolder.productPrice.setText(item.getPrice() + " MDL");
+                viewHolder.productPrice.setText(item.getBasePrice() + " MDL");
 
                 viewHolder.layoutParent.setOnClickListener(v -> {
                     if(assortmentItemActionListener != null)
@@ -120,7 +120,7 @@ public class AssortmentListGridAdapter extends ArrayAdapter<AssortmentRealm> {
 
 
                 viewHolder.productName2.setText(item.getName());
-                viewHolder.productPrice.setText(item.getPrice() + " MDL");
+                viewHolder.productPrice.setText(item.getBasePrice() + " MDL");
 
                 if(item.getBarcodes() != null && item.getBarcodes().size() == 1){
                     Barcodes itemBarcode = item.getBarcodes().get(0);

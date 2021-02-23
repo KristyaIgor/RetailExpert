@@ -9,17 +9,35 @@
         android:id="@+id/nav_sales"
         android:name="md.intelectsoft.quickpos.phoneMode.ui.sales.SalesFragment"
         android:label="@string/menu_sales"
-        tools:layout="@layout/fragment_sales" />
+        tools:layout="@layout/fragment_sales" >
+        <action
+            android:id="@+id/action_nav_sales_to_nav_orders"
+            app:destination="@id/nav_orders" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_orders"
         android:name="md.intelectsoft.quickpos.phoneMode.ui.orders.OrdersFragment"
         android:label="@string/menu_orders"
-        tools:layout="@layout/fragment_orders" />
+        tools:layout="@layout/fragment_orders" >
+        <action
+            android:id="@+id/action_nav_orders_to_nav_products"
+            app:destination="@id/nav_products" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_products"
         android:name="md.intelectsoft.quickpos.phoneMode.ui.products.ProductsFragment"
         android:label="@string/menu_products"
-        tools:layout="@layout/fragment_products" />
+        tools:layout="@layout/fragment_products" >
+        <action
+            android:id="@+id/action_nav_products_to_nav_shifts"
+            app:destination="@id/nav_shifts" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_shifts"
+        android:name="md.intelectsoft.quickpos.phoneMode.activity.ShiftListActivity"
+        android:label="Shifts"
+        tools:layout="@layout/activity_shift_list" />
 </navigation>

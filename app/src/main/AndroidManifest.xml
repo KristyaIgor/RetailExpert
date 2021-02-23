@@ -21,24 +21,43 @@
         android:theme="@style/Theme.MyRetail"
         android:usesCleartextTraffic="true">
 
-        <activity android:name=".tabledMode.activity.AuthTabledActivity" android:configChanges="locale"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".tabledMode.activity.ShiftsTabledActivity" android:configChanges="locale"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".tabledMode.activity.HistoryTabledActivity" android:configChanges="locale"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".tabledMode.activity.ReportsTabledActivity" android:configChanges="locale"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".tabledMode.activity.MainTabledActivity" android:configChanges="locale"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".tabledMode.activity.FinancialRepTabledActivity" android:configChanges="locale"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".tabledMode.activity.SettingsTabledActivity" android:configChanges="locale"
-            android:screenOrientation="landscape"/>
-
-
-        <activity android:name=".phoneMode.activity.ScanActivity"/>
-
+        <activity
+            android:name=".phoneMode.activity.ShiftDetailActivity"
+            android:label="@string/title_shift_detail"
+            android:parentActivityName=".phoneMode.activity.ShiftListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="md.intelectsoft.quickpos.phoneMode.activity.ShiftListActivity" />
+        </activity>
+        <activity
+            android:name=".tabledMode.activity.AuthTabledActivity"
+            android:configChanges="locale"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".tabledMode.activity.ShiftsTabledActivity"
+            android:configChanges="locale"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".tabledMode.activity.HistoryTabledActivity"
+            android:configChanges="locale"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".tabledMode.activity.ReportsTabledActivity"
+            android:configChanges="locale"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".tabledMode.activity.MainTabledActivity"
+            android:configChanges="locale"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".tabledMode.activity.FinancialRepTabledActivity"
+            android:configChanges="locale"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".tabledMode.activity.SettingsTabledActivity"
+            android:configChanges="locale"
+            android:screenOrientation="landscape" />
+        <activity android:name=".phoneMode.activity.ScanActivity" />
         <activity
             android:name=".phoneMode.activity.SalesActivity"
             android:label="@string/title_activity_sales"
