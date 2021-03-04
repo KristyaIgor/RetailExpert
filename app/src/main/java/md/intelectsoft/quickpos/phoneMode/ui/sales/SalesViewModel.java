@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import io.realm.Case;
+import io.realm.MutableRealmInteger;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
@@ -80,26 +81,38 @@ public class SalesViewModel extends ViewModel {
         else shift.setValue(null);
     }
 
-    public int updateShiftInfo(Shift info){
+    public int updateShiftInfo(Shift info,boolean toClose){
         int result = 0;
-        if(info.isClosed()){
+        if(toClose){
             RealmResults<Bill> billEntryResult = mRealm.where(Bill.class)
                     .equalTo("shiftId", info.getId())
                     .and()
                     .equalTo("state",0)
+                    .and()
+                    .equalTo("isDeleted", false)
                     .findAll();
 
             if(!billEntryResult.isEmpty()){
                 result =  billEntryResult.size();
             }
             else{
-                shift.setValue(info);
-                mRealm.executeTransaction(realm -> realm.insertOrUpdate(info));
+                mRealm.beginTransaction();
+                Shift shift1 = mRealm.where(Shift.class).equalTo("id", info.getId()).findFirst();
+                if(shift1 != null){
+                    long close = new Date().getTime();
+                    shift1.setClosedBy(POSApplication.getApplication().getUserId());
+                    shift1.setEndDate(close);
+                    shift1.setClosed(true);
+                    shift1.setClosedByName(POSApplication.getApplication().getUser().getFullName());
+                    shift1.setSended(false);
+                    shift.setValue(info);
+                }
+                mRealm.commitTransaction();
             }
         }
         else {
             shift.setValue(info);
-            mRealm.executeTransaction(realm -> realm.insertOrUpdate(info));
+            mRealm.executeTransaction(realm -> realm.insert(info));
         }
        return result;
     }
@@ -109,9 +122,9 @@ public class SalesViewModel extends ViewModel {
     }
 
     public void addProductToBill(AssortmentRealm item, double quantity) {
-        String id = UUID.randomUUID().toString();
         Bill bill = billEntry.getValue();
         if(bill == null){
+            String id = UUID.randomUUID().toString();
             if(!createBill(id)){
                 id = null;
             }
@@ -124,14 +137,14 @@ public class SalesViewModel extends ViewModel {
             RealmList<BillString> bilString = bill.getBillStrings();
             if(bilString != null  && bilString.size() > 0){
                 BillString lines = bilString.last();
-                Log.e("TAG", "addProductToBill: " + lines.getAssortmentFullName());
+
                 //TODO add check if item is nonIntegerSales
 
-                if (lines.getAssortmentId().equals(item.getId())){
+                if (lines.getAssortmentId().equals(item.getId()) && !item.isAllowNonInteger()){
                     double sumBefore = lines.getSum();
                     double sumWithDiscBefore = lines.getSumWithDiscount();
                     double quantityLine = lines.getQuantity() + quantity;
-                    double sum = lines.getPrice() * quantityLine;
+                    double sum = lines.getBasePrice() * quantityLine;
                     double sumWithDisc = lines.getPriceWithDiscount() * quantityLine;
                     String idLine = lines.getId();
 
@@ -143,7 +156,7 @@ public class SalesViewModel extends ViewModel {
                             string.setSumWithDiscount(sumWithDisc);
                         }
 
-                        Bill billEntryRealmResults = mRealm.where(Bill.class).equalTo("id", id).findFirst();
+                        Bill billEntryRealmResults = mRealm.where(Bill.class).equalTo("id", bill.getId()).findFirst();
                         if (billEntryRealmResults != null) {
                             billEntryRealmResults.setTotalSum(billEntryRealmResults.getTotalSum() + (sum - sumBefore));
                             billEntryRealmResults.setTotalDiscount(billEntryRealmResults.getTotalDiscount() + (sumWithDisc - sumWithDiscBefore));
@@ -228,6 +241,7 @@ public class SalesViewModel extends ViewModel {
         newBill.setTotalSum(0.0);
         newBill.setState(0);
         newBill.setShiftId(shift.getValue().getId());
+        newBill.setShiftReceiptNumSoftware(shift.getValue().getBillCounter() + 1);
         newBill.setSynchronized(false);
         String version ="0.0";
         try {
@@ -240,7 +254,11 @@ public class SalesViewModel extends ViewModel {
         newBill.setDeviceId(POSApplication.getApplication().getSharedPreferences(SharedPrefSettings,MODE_PRIVATE).getString("deviceId",null));
 
         mRealm.beginTransaction();
-            shift.getValue().setBillCounter(shift.getValue().getBillCounter() + 1);
+        Shift shift1 = mRealm.where(Shift.class).equalTo("id", shift.getValue().getId()).findFirst();
+        if(shift1 != null){
+            shift1.setBillCounter(shift1.getBillCounter() + 1);
+            shift.setValue(mRealm.copyFromRealm(shift1));
+        }
         mRealm.insert(newBill);
 
         History createdBill = new History();
@@ -255,6 +273,7 @@ public class SalesViewModel extends ViewModel {
         mRealm.commitTransaction();
 
         billEntry.setValue(newBill);
+
 
         return billCreated;
     }

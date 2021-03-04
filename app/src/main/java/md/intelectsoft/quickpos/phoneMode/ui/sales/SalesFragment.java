@@ -48,6 +48,7 @@ import md.intelectsoft.quickpos.Realm.localStorage.AssortmentRealm;
 import md.intelectsoft.quickpos.Realm.localStorage.BillString;
 import md.intelectsoft.quickpos.Realm.localStorage.History;
 import md.intelectsoft.quickpos.Realm.localStorage.Shift;
+import md.intelectsoft.quickpos.phoneMode.activity.CartActivity;
 import md.intelectsoft.quickpos.phoneMode.activity.ScanActivity;
 import md.intelectsoft.quickpos.utils.BaseEnum;
 import md.intelectsoft.quickpos.utils.CircleAnimationUtil;
@@ -89,7 +90,7 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
     private boolean shiftOpenButtonPay;
     private boolean shiftClosedButtonPay = false;
 
-    String idShift = null;
+    public static String idShift = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         salesViewModel = new ViewModelProvider(this).get(SalesViewModel.class);
@@ -138,11 +139,20 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
         });
 
         salesViewModel.getBillEntry().observe(getViewLifecycleOwner(), bill -> {
-            RealmList<BillString> line = bill.getBillStrings();
-            int countLineInBill = line != null ? line.size() : 0;
+            billId = bill.getId();
+            RealmList<BillString> lines = bill.getBillStrings();
+            int countLines = 0;
+            if(lines != null && lines.size() > 0)
+            for (BillString line : lines) {
+                if(line.isAllowNonInteger()){
+                    countLines +=1;
+                }
+                else
+                    countLines += line.getQuantity();
+            }
             double sum = bill.getTotalDiscount();
 
-            buttonPay.setText(countLineInBill + " items = " + sum);
+            buttonPay.setText(countLines + " items = " + String.format("%.2f", sum).replace(",","."));
         });
 
         salesViewModel.getShift().observe(getViewLifecycleOwner(), shift -> {
@@ -153,10 +163,9 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
                 buttonPay.setTextColor(Color.WHITE);
             }
             else{
+                idShift = shift.getId();
                 if(!shift.isClosed() && new Date().getTime() > shift.getNeedClose() && shift.getNeedClose() != 0){
                     shiftClosedButtonPay = true;
-
-                    idShift = shift.getId();
 
                     buttonPay.setText(R.string.text_close_shift);
                     buttonPay.setBackgroundColor(context.getColor(R.color.btnPay));
@@ -287,7 +296,7 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
                             shiftEntry.setNeedClose(need_close);
                             shiftEntry.setId(UUID.randomUUID().toString());
 
-                            salesViewModel.updateShiftInfo(shiftEntry);
+                            salesViewModel.updateShiftInfo(shiftEntry, false);
 
                             History history = new History();
                             history.setDate(new Date().getTime());
@@ -314,6 +323,11 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
             else if(shiftClosedButtonPay){
 
             }
+            else if(billId != null){
+                Intent cart = new Intent(context, CartActivity.class);
+                cart.putExtra("billId", billId);
+                startActivity(cart);
+            }
         });
 
         return root;
@@ -328,7 +342,7 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
         shift.setClosedByName(POSApplication.getApplication().getUser().getFullName());
         shift.setSended(false);
 
-        int result = salesViewModel.updateShiftInfo(shift);
+        int result = salesViewModel.updateShiftInfo(shift, true);
         if(result > 0){
             new MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
                     .setTitle(R.string.message_attention)
@@ -501,7 +515,7 @@ public class SalesFragment extends Fragment  implements IOnBackPressed {
             public void onAnimationEnd(Animator animation) {
                 //addItemToCart();
                 if(assortmentClicked != null){
-                    Toast.makeText(context, assortmentClicked.getName() + " added...", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, assortmentClicked.getName() + " added...", Toast.LENGTH_SHORT).show();
                     salesViewModel.addProductToBill(assortmentClicked, 1);
                 }
             }

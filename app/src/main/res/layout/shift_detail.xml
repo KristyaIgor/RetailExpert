@@ -7,4 +7,4 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:textIsSelectable="true"
-    tools:context=".phoneMode.activity.ShiftDetailFragment" />
+    tools:context=".phoneMode.activity.shiftUI.ShiftDetailFragment" />

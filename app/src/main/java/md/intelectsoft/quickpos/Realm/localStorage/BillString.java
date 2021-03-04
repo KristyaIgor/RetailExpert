@@ -16,7 +16,7 @@ public class BillString extends RealmObject {
     private String assortmentId;
     private String assortmentFullName;
     private int cpvCode;
-    private boolean allowNonInteger;
+    private boolean allowNonInteger;   //продажа не целово кол-во true - продается не целое кол-во  false - запрещено
     private boolean allowDiscounts;
     @Required
     private String userId;

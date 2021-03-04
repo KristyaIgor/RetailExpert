@@ -83,7 +83,9 @@ public class Assortment {
     @SerializedName("VAT")
     @Expose
     private double vAT;
-
+    @SerializedName("WeightSale")
+    @Expose
+    private boolean weightSale;
 
     public List<Promotion> getPromotions() {
         return promotions;
@@ -277,4 +279,11 @@ public class Assortment {
         this.vAT = vAT;
     }
 
+    public boolean isWeightSale() {
+        return weightSale;
+    }
+
+    public void setWeightSale(boolean weightSale) {
+        this.weightSale = weightSale;
+    }
 }

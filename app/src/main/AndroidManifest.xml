@@ -20,14 +20,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyRetail"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".phoneMode.activity.PaymentActivity"></activity>
+        <activity android:name=".phoneMode.activity.CartActivity" />
         <activity
-            android:name=".phoneMode.activity.ShiftDetailActivity"
+            android:name=".phoneMode.activity.shiftUI.ShiftDetailActivity"
             android:label="@string/title_shift_detail"
-            android:parentActivityName=".phoneMode.activity.ShiftListActivity">
+            android:parentActivityName=".phoneMode.activity.shiftUI.ShiftListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="md.intelectsoft.quickpos.phoneMode.activity.ShiftListActivity" />
+                android:value="md.intelectsoft.quickpos.phoneMode.activity.shiftUI.ShiftListActivity" />
         </activity>
         <activity
             android:name=".tabledMode.activity.AuthTabledActivity"

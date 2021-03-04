@@ -1,4 +1,4 @@
-package md.intelectsoft.quickpos.phoneMode.activity;
+package md.intelectsoft.quickpos.phoneMode.activity.shiftUI;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -49,11 +49,11 @@ public class ShiftDetailFragment extends Fragment {
 
         mRealm = Realm.getDefaultInstance();
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
+        if (getArguments().containsKey("ARG_ITEM_ID")) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = mRealm.where(Shift.class).equalTo("id", (getArguments().getString(ARG_ITEM_ID))).findFirst();
+            mItem = mRealm.where(Shift.class).equalTo("id", (getArguments().getString("ARG_ITEM_ID"))).findFirst();
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);

@@ -34,6 +34,7 @@ public class AssortmentRealm extends RealmObject {
     private double vat;
     private byte[] image;
 
+
     public int getCpvCode() {
         return cpvCode;
     }

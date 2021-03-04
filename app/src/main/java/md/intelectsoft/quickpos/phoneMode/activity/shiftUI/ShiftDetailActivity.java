@@ -1,4 +1,4 @@
-package md.intelectsoft.quickpos.phoneMode.activity;
+package md.intelectsoft.quickpos.phoneMode.activity.shiftUI;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +17,6 @@ import android.view.MenuItem;
 
 import io.realm.Realm;
 import md.intelectsoft.quickpos.R;
-import md.intelectsoft.quickpos.phoneMode.viewModels.ShiftViewModel;
 
 /**
  * An activity representing a single Shift detail screen. This
@@ -57,7 +56,7 @@ public class ShiftDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ShiftDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(ShiftDetailFragment.ARG_ITEM_ID));
+            arguments.putString("ARG_ITEM_ID", getIntent().getStringExtra("ARG_ITEM_ID"));
             ShiftDetailFragment fragment = new ShiftDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.shift_detail_container, fragment).commit();

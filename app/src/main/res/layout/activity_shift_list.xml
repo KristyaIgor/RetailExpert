@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".phoneMode.activity.ShiftListActivity">
+    tools:context=".phoneMode.activity.shiftUI.ShiftListActivity">
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -13,7 +13,11 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/shift_list" />
     </FrameLayout>
+
+    <include
+        layout="@layout/shift_list"
+        app:layout_anchor="@+id/frameLayout"
+        app:layout_anchorGravity="center" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

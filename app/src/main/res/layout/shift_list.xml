@@ -9,5 +9,5 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".phoneMode.activity.ShiftListActivity"
+    tools:context=".phoneMode.activity.shiftUI.ShiftListActivity"
     tools:listitem="@layout/shift_list_content" />

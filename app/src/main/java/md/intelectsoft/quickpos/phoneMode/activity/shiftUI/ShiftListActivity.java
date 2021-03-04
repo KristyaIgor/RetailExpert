@@ -1,4 +1,4 @@
-package md.intelectsoft.quickpos.phoneMode.activity;
+package md.intelectsoft.quickpos.phoneMode.activity.shiftUI;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import android.widget.TextView;
 import md.intelectsoft.quickpos.R;
 
 import md.intelectsoft.quickpos.Realm.localStorage.Shift;
+import md.intelectsoft.quickpos.phoneMode.activity.SalesActivity;
 import md.intelectsoft.quickpos.phoneMode.viewModels.ShiftViewModel;
 
 import java.util.List;
@@ -70,7 +71,7 @@ public class ShiftListActivity extends Fragment {
 
                 Context context = view.getContext();
                 Intent intent = new Intent(context, ShiftDetailActivity.class);
-                intent.putExtra(ShiftDetailFragment.ARG_ITEM_ID, item.getId());
+                intent.putExtra("ARG_ITEM_ID", item.getId());
 
                 context.startActivity(intent);
             }
@@ -83,8 +84,7 @@ public class ShiftListActivity extends Fragment {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.shift_list_content, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shift_list_content, parent, false);
             return new ViewHolder(view);
         }
 

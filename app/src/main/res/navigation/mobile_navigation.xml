@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/nav_shifts"
-        android:name="md.intelectsoft.quickpos.phoneMode.activity.ShiftListActivity"
+        android:name="md.intelectsoft.quickpos.phoneMode.activity.shiftUI.ShiftListActivity"
         android:label="Shifts"
         tools:layout="@layout/activity_shift_list" />
 </navigation>
