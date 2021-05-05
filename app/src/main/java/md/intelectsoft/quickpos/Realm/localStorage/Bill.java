@@ -10,9 +10,9 @@ public class Bill extends RealmObject {
     private String id;
     private String shiftId;
     private int operationType;
-    private int shiftReceiptNumSoftware;
-    private int shiftReceiptFiscalDevice;
-    private int receiptNumFiscalMemory;
+    private int shiftNumberSoftware;
+    private int shiftNumberFiscal;
+    private int globalNumber;
     private String discountCardId;
     private String discountCardNumber;
     private String deviceId;
@@ -52,20 +52,21 @@ public class Bill extends RealmObject {
         this.shiftId = shiftId;
     }
 
-    public int getShiftReceiptNumSoftware() {
-        return shiftReceiptNumSoftware;
+
+    public int getShiftNumberSoftware() {
+        return shiftNumberSoftware;
     }
 
-    public void setShiftReceiptNumSoftware(int shiftReceiptNumSoftware) {
-        this.shiftReceiptNumSoftware = shiftReceiptNumSoftware;
+    public void setShiftNumberSoftware(int shiftNumberSoftware) {
+        this.shiftNumberSoftware = shiftNumberSoftware;
     }
 
-    public int getReceiptNumFiscalMemory() {
-        return receiptNumFiscalMemory;
+    public int getGlobalNumber() {
+        return globalNumber;
     }
 
-    public void setReceiptNumFiscalMemory(int receiptNumFiscalMemory) {
-        this.receiptNumFiscalMemory = receiptNumFiscalMemory;
+    public void setGlobalNumber(int globalNumber) {
+        this.globalNumber = globalNumber;
     }
 
     public String getDiscountCardId() {
@@ -236,12 +237,12 @@ public class Bill extends RealmObject {
         this.operationType = operationType;
     }
 
-    public int getShiftReceiptFiscalDevice() {
-        return shiftReceiptFiscalDevice;
+    public int getShiftNumberFiscal() {
+        return shiftNumberFiscal;
     }
 
-    public void setShiftReceiptFiscalDevice(int shiftReceiptFiscalDevice) {
-        this.shiftReceiptFiscalDevice = shiftReceiptFiscalDevice;
+    public void setShiftNumberFiscal(int shiftNumberFiscal) {
+        this.shiftNumberFiscal = shiftNumberFiscal;
     }
 
     public boolean isDeleted() {

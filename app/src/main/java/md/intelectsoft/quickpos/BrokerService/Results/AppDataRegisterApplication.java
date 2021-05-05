@@ -16,6 +16,9 @@ public class AppDataRegisterApplication {
     @SerializedName("LicenseID")
     @Expose
     private String licenseID;
+    @SerializedName("Logo")
+    @Expose
+    private String logo;
     @SerializedName("ServerDateTime")
     @Expose
     private String serverDateTime;
@@ -53,6 +56,14 @@ public class AppDataRegisterApplication {
 
     public void setLicenseID(String licenseID) {
         this.licenseID = licenseID;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public String getURI() {

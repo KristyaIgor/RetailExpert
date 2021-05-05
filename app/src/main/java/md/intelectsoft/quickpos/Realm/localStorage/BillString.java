@@ -15,7 +15,8 @@ public class BillString extends RealmObject {
     @Required
     private String assortmentId;
     private String assortmentFullName;
-    private int cpvCode;
+    private String assortmentShortName;
+    private String cpvCode;
     private boolean allowNonInteger;   //продажа не целово кол-во true - продается не целое кол-во  false - запрещено
     private boolean allowDiscounts;
     @Required
@@ -30,7 +31,9 @@ public class BillString extends RealmObject {
     private double price;
     private double sum;
     private double sumWithDiscount;
-    private int vatCode;
+    private double sumVat;
+    private double sumWithoutVat;
+    private String vatCode;
     private double vatValue;
     private String barcode;
     private boolean isDeleted;
@@ -214,11 +217,11 @@ public class BillString extends RealmObject {
         this.expanded = expanded;
     }
 
-    public int getCpvCode() {
+    public String getCpvCode() {
         return cpvCode;
     }
 
-    public void setCpvCode(int cpvCode) {
+    public void setCpvCode(String cpvCode) {
         this.cpvCode = cpvCode;
     }
 
@@ -230,11 +233,35 @@ public class BillString extends RealmObject {
         this.price = price;
     }
 
-    public int getVatCode() {
+    public String getVatCode() {
         return vatCode;
     }
 
-    public void setVatCode(int vatCode) {
+    public void setVatCode(String vatCode) {
         this.vatCode = vatCode;
+    }
+
+    public String getAssortmentShortName() {
+        return assortmentShortName;
+    }
+
+    public void setAssortmentShortName(String assortmentShortName) {
+        this.assortmentShortName = assortmentShortName;
+    }
+
+    public double getSumVat() {
+        return sumVat;
+    }
+
+    public void setSumVat(double sumVat) {
+        this.sumVat = sumVat;
+    }
+
+    public double getSumWithoutVat() {
+        return sumWithoutVat;
+    }
+
+    public void setSumWithoutVat(double sumWithoutVat) {
+        this.sumWithoutVat = sumWithoutVat;
     }
 }

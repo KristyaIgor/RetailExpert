@@ -20,7 +20,7 @@ import com.vfi.smartpos.deviceservice.aidl.IScanner;
 import com.vfi.smartpos.deviceservice.aidl.ISerialPort;
 import com.vfi.smartpos.deviceservice.aidl.key_manager.IDukpt;
 
-import md.intelectsoft.quickpos.utils.POSApplication;
+import md.intelectsoft.quickpos.POSApplication;
 
 ;
 

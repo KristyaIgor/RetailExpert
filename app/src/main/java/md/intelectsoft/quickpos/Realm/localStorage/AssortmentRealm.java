@@ -32,6 +32,7 @@ public class AssortmentRealm extends RealmObject {
     private double stockBalanceDate;
     private String unit;
     private double vat;
+    private String vatCode;
     private byte[] image;
 
 
@@ -241,5 +242,13 @@ public class AssortmentRealm extends RealmObject {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public String getVatCode() {
+        return vatCode;
+    }
+
+    public void setVatCode(String vatCode) {
+        this.vatCode = vatCode;
     }
 }

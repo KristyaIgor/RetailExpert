@@ -12,23 +12,41 @@
         android:required="true" />
 
     <application
-        android:name=".utils.POSApplication"
+        android:name=".POSApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_new_version"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_new_version_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyRetail"
         android:usesCleartextTraffic="true">
-        <activity android:name=".phoneMode.activity.PaymentActivity"></activity>
+
+        <activity android:name=".phoneMode.ui.orders.BillDetailActivity"/>
+        <activity android:name=".phoneMode.ui.shiftUI.BillShiftsActivity"/>
+        <activity android:name=".phoneMode.activity.InOutCashActivity" />
+        <activity
+            android:name=".phoneMode.activity.FinancialReportsActivity"
+            android:label="Financial operation" />
+        <activity android:name=".phoneMode.activity.CreditCardPayActivity" />
+        <activity android:name=".phoneMode.activity.CountSelectActivity" />
+        <activity
+            android:name=".phoneMode.ui.shiftUI.ShiftListActivity"
+            android:label="Shifts" />
+        <activity android:name=".phoneMode.activity.SettingsActivity" />
+        <activity
+            android:name=".phoneMode.ui.orders.BillListActivity"
+            android:label="Bills" />
+        <activity android:name=".phoneMode.activity.InputReceiveActivity" />
+        <activity android:name=".phoneMode.activity.PaymentActivity" />
         <activity android:name=".phoneMode.activity.CartActivity" />
         <activity
-            android:name=".phoneMode.activity.shiftUI.ShiftDetailActivity"
+            android:name=".phoneMode.ui.shiftUI.ShiftDetailActivity"
             android:label="@string/title_shift_detail"
-            android:parentActivityName=".phoneMode.activity.shiftUI.ShiftListActivity">
+            android:parentActivityName=".phoneMode.ui.shiftUI.ShiftListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="md.intelectsoft.quickpos.phoneMode.activity.shiftUI.ShiftListActivity" />
+                android:value="md.intelectsoft.quickpos.phoneMode.ui.shiftUI.ShiftListActivity" />
         </activity>
         <activity
             android:name=".tabledMode.activity.AuthTabledActivity"
@@ -60,8 +78,8 @@
             android:screenOrientation="landscape" />
         <activity android:name=".phoneMode.activity.ScanActivity" />
         <activity
-            android:name=".phoneMode.activity.SalesActivity"
-            android:label="@string/title_activity_sales"
+            android:name=".phoneMode.activity.MainActivityPhone"
+            android:label="Sales"
             android:theme="@style/Theme.MyRetail.NoActionBar" />
         <activity
             android:name=".phoneMode.activity.AuthorizeActivity"
@@ -77,6 +95,9 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

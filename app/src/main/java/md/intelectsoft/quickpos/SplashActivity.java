@@ -1,23 +1,20 @@
 package md.intelectsoft.quickpos;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
-import android.util.DisplayMetrics;
 import android.view.View;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import md.intelectsoft.quickpos.utils.SPFHelp;
 import md.intelectsoft.quickpos.phoneMode.activity.AuthorizeActivity;
-import md.intelectsoft.quickpos.phoneMode.activity.SalesActivity;
+import md.intelectsoft.quickpos.phoneMode.activity.MainActivityPhone;
 import md.intelectsoft.quickpos.tabledMode.activity.AuthTabledActivity;
+import md.intelectsoft.quickpos.utils.SPFHelp;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -33,16 +30,17 @@ public class SplashActivity extends AppCompatActivity {
 
         new Timer().schedule(new TimerTask() {
             public void run() {
-
                 boolean isTabTwoVariant = (SplashActivity.this.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+                String licenseId = SPFHelp.getInstance().getString("LicenseID", null);
 
                 if (isTabTwoVariant){
                     startActivity(new Intent(SplashActivity.this, AuthTabledActivity.class));
                 }else{
                     // smaller device
                     boolean isRemember = SPFHelp.getInstance().getBoolean("KeepMeSigned", false);
-                    if(isRemember){
-                        startActivity(new Intent(SplashActivity.this, SalesActivity.class));
+
+                    if(isRemember && licenseId != null){
+                        startActivity(new Intent(SplashActivity.this, MainActivityPhone.class));
                     }
                     else{
                         startActivity(new Intent(SplashActivity.this, AuthorizeActivity.class));

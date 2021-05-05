@@ -32,10 +32,10 @@ import md.intelectsoft.quickpos.Realm.localStorage.Shift;
 import md.intelectsoft.quickpos.tabledMode.adapters.ListShiftsRealmRCAdapter;
 import md.intelectsoft.quickpos.tabledMode.adapters.TabShiftInfoTicketsAdapter;
 import md.intelectsoft.quickpos.utils.BaseEnum;
-import md.intelectsoft.quickpos.utils.POSApplication;
+import md.intelectsoft.quickpos.POSApplication;
 
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefSettings;
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefWorkPlaceSettings;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefSettings;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefWorkPlaceSettings;
 
 
 public class ShiftsTabledActivity extends AppCompatActivity {

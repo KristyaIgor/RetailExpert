@@ -29,12 +29,12 @@ import java.io.File;
 
 import md.intelectsoft.quickpos.BuildConfig;
 import md.intelectsoft.quickpos.R;
-import md.intelectsoft.quickpos.utils.POSApplication;
+import md.intelectsoft.quickpos.POSApplication;
 import md.intelectsoft.quickpos.utils.UpdateHelper;
 import md.intelectsoft.quickpos.utils.UpdateInformation;
 
 import static android.content.Context.MODE_PRIVATE;
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefSettings;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefSettings;
 
 /**
  * Created by Igor on 13.05.2020

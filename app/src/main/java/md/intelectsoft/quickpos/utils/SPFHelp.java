@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import java.util.Map;
 
+import md.intelectsoft.quickpos.POSApplication;
+
 public class SPFHelp {
 
     private static SPFHelp instance;

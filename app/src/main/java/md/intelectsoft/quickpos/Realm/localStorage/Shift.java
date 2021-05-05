@@ -10,6 +10,8 @@ import io.realm.annotations.Required;
 public class Shift extends RealmObject {
     @Required
     private String id;
+    private int globalNumber;
+    private int billCounter;
     private long startDate;
     private long endDate;
     @Required
@@ -24,7 +26,6 @@ public class Shift extends RealmObject {
     private boolean closed;
     private boolean isSended;
     private long needClose;
-    private int billCounter;
     private double cashIn;
     private double cashOut;
 
@@ -154,5 +155,13 @@ public class Shift extends RealmObject {
 
     public void setCashOut(double cashOut) {
         this.cashOut = cashOut;
+    }
+
+    public int getGlobalNumber() {
+        return globalNumber;
+    }
+
+    public void setGlobalNumber(int globalNumber) {
+        this.globalNumber = globalNumber;
     }
 }

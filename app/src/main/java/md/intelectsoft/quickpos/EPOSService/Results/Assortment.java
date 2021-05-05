@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 import io.realm.RealmList;
-import io.realm.RealmObject;
 import md.intelectsoft.quickpos.Realm.Promotion;
 
 public class Assortment {
@@ -86,6 +85,9 @@ public class Assortment {
     @SerializedName("WeightSale")
     @Expose
     private boolean weightSale;
+    @SerializedName("VATQuote")
+    @Expose
+    private String vatCode;
 
     public List<Promotion> getPromotions() {
         return promotions;
@@ -285,5 +287,13 @@ public class Assortment {
 
     public void setWeightSale(boolean weightSale) {
         this.weightSale = weightSale;
+    }
+
+    public String getVatCode() {
+        return vatCode;
+    }
+
+    public void setVatCode(String vatCode) {
+        this.vatCode = vatCode;
     }
 }

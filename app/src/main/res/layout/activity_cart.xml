@@ -73,25 +73,13 @@
         android:id="@+id/order_line_list"
         android:name="md.intelectsoft.quickpos.phoneMode.activity.CartActivity"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layoutManager="LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/btn_pay_bill_cart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout4"
-        tools:context=".phoneMode.activity.shiftUI.ShiftListActivity"
+        tools:context=".phoneMode.ui.shiftUI.ShiftListActivity"
         tools:listitem="@layout/billstring_list_content" />
 
-    <TextView
-        android:id="@+id/textTotalSumCart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="TextView"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_pay_bill_cart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/order_line_list"
-        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

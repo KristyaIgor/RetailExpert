@@ -18,7 +18,7 @@ import com.google.android.material.tabs.TabLayout;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import md.intelectsoft.quickpos.tabledMode.activity.MainTabledActivity;
-import md.intelectsoft.quickpos.utils.POSApplication;
+import md.intelectsoft.quickpos.POSApplication;
 import md.intelectsoft.quickpos.R;
 import md.intelectsoft.quickpos.Realm.localStorage.Bill;
 import md.intelectsoft.quickpos.Realm.localStorage.Shift;

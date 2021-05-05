@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -24,17 +26,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import md.intelectsoft.quickpos.R;
 import md.intelectsoft.quickpos.Realm.localStorage.BillString;
-import md.intelectsoft.quickpos.phoneMode.models.CartViewModel;
+
+import static md.intelectsoft.quickpos.phoneMode.activity.MainActivityPhone.salesViewModel;
 
 @SuppressLint("NonConstantResourceId")
 public class CartActivity extends AppCompatActivity {
-
-    CartViewModel cartViewModel;
     String idBill;
 
     @BindView(R.id.order_line_list) RecyclerView recyclerView;
     @BindView(R.id.btn_pay_bill_cart) MaterialButton buttonPay;
-    @BindView(R.id.textTotalSumCart) TextView textTotalSum;
 
     @OnClick(R.id.btn_backFromCartPhoneMode) void onBack() {
         finish();
@@ -43,13 +43,12 @@ public class CartActivity extends AppCompatActivity {
     @OnClick(R.id.btn_pay_bill_cart) void onPay(){
         Intent payIntent = new Intent(this, PaymentActivity.class);
         payIntent.putExtra("id", idBill);
-        startActivity(payIntent);
+        startActivityForResult(payIntent, 111);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
         View decorView = getWindow().getDecorView();
         Window window = getWindow();
         decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -59,7 +58,7 @@ public class CartActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         ButterKnife.setDebug(true);
 
-        cartViewModel.getBillStrings().observe( this, billStringsList -> {
+        salesViewModel.getBillStrings().observe( this, billStringsList -> {
             if(billStringsList.size() > 0) buttonPay.setVisibility(View.VISIBLE);
             else buttonPay.setVisibility(View.GONE);
 
@@ -67,11 +66,25 @@ public class CartActivity extends AppCompatActivity {
         });
 
         idBill = getIntent().getStringExtra("billId");
-        cartViewModel.getBillStringList(idBill);
+        salesViewModel.getBillStringList(idBill);
 
-        double[] retStatement = cartViewModel.getBillInfo(idBill);
-        buttonPay.setText(String.format("%.0f",retStatement[0])+ " items = " + String.format("%.2f", retStatement[1]).replace(",","."));
-        textTotalSum.setText("TOTAL: " + String.format("%.2f", retStatement[1]).replace(",",".") + " MDL");
+        double[] retStatement = salesViewModel.getBillInfo(idBill);
+        buttonPay.setText(String.format("%.0f",retStatement[0])+ " items = " + String.format("%.2f", retStatement[1]).replace(",",".") + " MDL");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 111){
+            if(resultCode == RESULT_OK){
+                setResult(RESULT_OK);
+                finish();
+            }
+            else if(resultCode == 951){
+                setResult(951);
+                finish();
+            }
+        }
     }
 
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
@@ -92,6 +105,23 @@ public class CartActivity extends AppCompatActivity {
 
             holder.name.setText(item.getAssortmentFullName());
 
+            if(!item.isDeleted()) {
+                boolean expanded = item.isExpanded();
+
+                holder.subItem.setVisibility(expanded ? View.VISIBLE : View.GONE);
+            }
+
+            holder.itemView.setOnClickListener(v -> {
+                holder.collapsOtherItems(position);
+                // Get the current state of the item
+                boolean expandeds = item.isExpanded();
+                // Change the state
+                item.setExpanded(!expandeds);
+
+                // Notify the adapter that item has changed
+                notifyItemChanged(position);
+            });
+
             if(item.getQuantity() > 1){
                 holder.pricePerOne.setVisibility(View.VISIBLE);
                 long afterComma = Math.round((item.getQuantity() % 1) * 100);
@@ -102,13 +132,25 @@ public class CartActivity extends AppCompatActivity {
                 }
 
                 holder.pricePerOne.setText(String.format("%.2f", item.getPriceWithDiscount()).replace(",", ".") + " MDL");
+
+                holder.count.setText(String.format("%.0f", item.getQuantity()).replace(",", ".") + " items");
+
             }
             else {
                 holder.pricePerOne.setVisibility(View.GONE);
                 holder.quantity.setText(String.format("%.0f", item.getQuantity()).replace(",", "."));
+
+                holder.count.setText(String.format("%.0f", item.getQuantity()).replace(",", ".") + " item");
             }
 
+            holder.price.setText(String.format("%.2f", item.getPriceWithDiscount()).replace(",", ".") + " MDL\nunit");
             holder.sum.setText(String.format("%.2f", item.getSumWithDiscount()).replace(",", ".") + " MDL");
+
+            holder.remove.setOnClickListener(v -> {
+                salesViewModel.removeBillLine(item);
+                mValues.remove(position);
+                notifyItemRemoved(position);
+            });
         }
 
         @Override
@@ -121,6 +163,11 @@ public class CartActivity extends AppCompatActivity {
             final TextView name;
             final TextView pricePerOne;
             final TextView sum;
+            final ConstraintLayout subItem;
+            final Button count;
+            final Button price;
+            final Button remove;
+
 
             ViewHolder(View view) {
                 super(view);
@@ -128,6 +175,30 @@ public class CartActivity extends AppCompatActivity {
                 name = (TextView) view.findViewById(R.id.textLineName);
                 pricePerOne = (TextView) view.findViewById(R.id.textLinePricePerOne);
                 sum = (TextView) view.findViewById(R.id.textLineTotalSum);
+                subItem = (ConstraintLayout) view.findViewById(R.id.layoutDetailProductCartAction);
+
+                count = (Button) view.findViewById(R.id.buttonCountItemsAdapterLine);
+                price = (Button) view.findViewById(R.id.buttonUnitPriceAdapterLine);
+                remove = (Button) view.findViewById(R.id.buttonRemoveItemAdapterLine);
+            }
+
+            private void collapsOtherItems(int position){
+                int allItems = getItemCount();
+                for(int i= 0; i < allItems; i++){
+                    if(i == position)
+                        continue;
+                    else{
+                        BillString billString = mValues.get(i);
+                        if(!billString.isDeleted()){
+                            boolean expand = billString.isExpanded();
+
+                            if(expand)
+                                billString.setExpanded(!expand);
+
+                            notifyItemChanged(i);
+                        }
+                    }
+                }
             }
         }
     }

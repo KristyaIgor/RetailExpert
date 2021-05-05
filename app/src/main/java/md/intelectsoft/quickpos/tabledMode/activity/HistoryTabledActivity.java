@@ -26,7 +26,7 @@ import md.intelectsoft.quickpos.R;
 import md.intelectsoft.quickpos.Realm.localStorage.History;
 import md.intelectsoft.quickpos.tabledMode.adapters.HistoryRealmRCAdapter;
 import md.intelectsoft.quickpos.utils.BaseEnum;
-import md.intelectsoft.quickpos.utils.POSApplication;
+import md.intelectsoft.quickpos.POSApplication;
 
 
 public class HistoryTabledActivity extends AppCompatActivity {

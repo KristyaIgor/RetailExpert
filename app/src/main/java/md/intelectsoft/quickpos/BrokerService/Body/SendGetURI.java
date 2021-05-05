@@ -46,6 +46,9 @@ public class SendGetURI {
     @SerializedName("SalePointAddress")
     @Expose
     private String salePointAddress;
+    @SerializedName("LastAuthorizedUser")
+    @Expose
+    private String lastAuthorizedUser;
 
     public String getApplicationVersion() {
         return applicationVersion;
@@ -149,5 +152,13 @@ public class SendGetURI {
 
     public void setSalePointAddress(String salePointAddress) {
         this.salePointAddress = salePointAddress;
+    }
+
+    public String getLastAuthorizedUser() {
+        return lastAuthorizedUser;
+    }
+
+    public void setLastAuthorizedUser(String lastAuthorizedUser) {
+        this.lastAuthorizedUser = lastAuthorizedUser;
     }
 }

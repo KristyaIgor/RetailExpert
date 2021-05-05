@@ -86,21 +86,22 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/buttonCashPay"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="1dp"
             android:background="@android:color/transparent"
-            android:drawableTop="@drawable/add_circle_outline_24"
+            android:drawableTop="@drawable/ic_count_items"
             android:paddingTop="20dp"
             android:paddingBottom="16dp"
-            android:text="Cash"
+            android:text="Numerar"
             android:textAllCaps="false"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/divider48"
             app:layout_constraintEnd_toStartOf="@id/divider45"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider46" />
+            app:layout_constraintTop_toBottomOf="@+id/divider46"
+            app:layout_constraintVertical_bias="0.0" />
 
         <View
             android:id="@+id/divider45"
@@ -109,16 +110,16 @@
             android:layout_weight="1"
             android:background="?android:attr/listDivider"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button2"
-            app:layout_constraintStart_toEndOf="@+id/button"
+            app:layout_constraintEnd_toStartOf="@+id/buttonCreditPay"
+            app:layout_constraintStart_toEndOf="@+id/buttonCashPay"
             app:layout_constraintTop_toBottomOf="@+id/divider46" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/buttonCreditPay"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@android:color/transparent"
-            android:drawableTop="@drawable/add_circle_outline_24"
+            android:drawableTop="@drawable/ic_menu_gallery"
             android:paddingTop="20dp"
             android:paddingBottom="16dp"
             android:text="Credit card"
@@ -130,14 +131,14 @@
             app:layout_constraintTop_toBottomOf="@+id/divider46" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/buttonOtherPay"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@android:color/transparent"
-            android:drawableTop="@drawable/add_circle_outline_24"
+            android:drawableTop="@drawable/other_pay_phone_mode_v2"
             android:paddingTop="20dp"
             android:paddingBottom="16dp"
-            android:text="Others"
+            android:text="Altele"
             android:textAllCaps="false"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/divider48"
@@ -168,8 +169,8 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="?android:attr/listDivider"
-            app:layout_constraintEnd_toStartOf="@+id/button3"
-            app:layout_constraintStart_toEndOf="@+id/button2"
+            app:layout_constraintEnd_toStartOf="@+id/buttonOtherPay"
+            app:layout_constraintStart_toEndOf="@+id/buttonCreditPay"
             app:layout_constraintTop_toBottomOf="@+id/divider46" />
 
         <TextView

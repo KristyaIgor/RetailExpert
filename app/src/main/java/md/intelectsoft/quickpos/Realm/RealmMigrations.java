@@ -12,8 +12,9 @@ public class RealmMigrations implements RealmMigration {
     public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
         final RealmSchema schema = realm.getSchema();
         if(oldVersion == 1){
-
+//            schema.get("BillString").addField("assortmentShortName",String.class);
             oldVersion++;
         }
+
     }
 }

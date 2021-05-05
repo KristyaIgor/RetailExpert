@@ -14,14 +14,11 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface BrokerServiceAPI {
-    @GET("/ISLicenseService/json/Ping")
-    Call<Boolean> ping ();
-
     @POST("/ISLicenseService/json/RegisterApplication")
     Call<RegisterApplication> registerApplicationCall(@Body SendRegisterApplication bodyRegisterApp);
 
     @POST("/ISLicenseService/json/GetURI")
-    Call<RegisterApplication> getURICall(@Body SendGetURI sendGetURI);
+    Call<RegisterApplication> getURI(@Body SendGetURI sendGetURI);
 
     @POST("/ISLicenseService/json/UpdateDiagnosticInformation")
     Call<ErrorMessage> updateDiagnosticInfo (@Body InformationData informationData);

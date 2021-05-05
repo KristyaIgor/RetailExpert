@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_sales">
+    app:startDestination="@+id/nav_sales"
+    >
 
     <fragment
         android:id="@+id/nav_sales"
@@ -17,7 +18,7 @@
 
     <fragment
         android:id="@+id/nav_orders"
-        android:name="md.intelectsoft.quickpos.phoneMode.ui.orders.OrdersFragment"
+        android:name="md.intelectsoft.quickpos.phoneMode.ui.orders.BillListActivity"
         android:label="@string/menu_orders"
         tools:layout="@layout/fragment_orders" >
         <action
@@ -28,7 +29,7 @@
     <fragment
         android:id="@+id/nav_products"
         android:name="md.intelectsoft.quickpos.phoneMode.ui.products.ProductsFragment"
-        android:label="@string/menu_products"
+        android:label="string/menu_products"
         tools:layout="@layout/fragment_products" >
         <action
             android:id="@+id/action_nav_products_to_nav_shifts"
@@ -37,7 +38,7 @@
 
     <fragment
         android:id="@+id/nav_shifts"
-        android:name="md.intelectsoft.quickpos.phoneMode.activity.shiftUI.ShiftListActivity"
+        android:name="md.intelectsoft.quickpos.phoneMode.ui.shiftUI.ShiftListActivity"
         android:label="Shifts"
         tools:layout="@layout/activity_shift_list" />
 </navigation>

@@ -29,13 +29,13 @@ import md.intelectsoft.quickpos.FiscalService.Result.SimpleResult;
 import md.intelectsoft.quickpos.R;
 import md.intelectsoft.quickpos.tabledMode.datecs.PrinterManager;
 import md.intelectsoft.quickpos.utils.BaseEnum;
-import md.intelectsoft.quickpos.utils.POSApplication;
+import md.intelectsoft.quickpos.POSApplication;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefSettings;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefSettings;
 
 public class FragmentFiscalPage extends Fragment {
 

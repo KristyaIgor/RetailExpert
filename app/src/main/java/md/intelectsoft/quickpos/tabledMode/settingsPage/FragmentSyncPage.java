@@ -23,17 +23,11 @@ import java.util.TimeZone;
 
 import io.realm.Realm;
 import io.realm.RealmList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import md.intelectsoft.quickpos.EPOSService.EPOSRetrofitClient;
 import md.intelectsoft.quickpos.EPOSService.EposServiceAPI;
 import md.intelectsoft.quickpos.EPOSService.Results.Assortment;
 import md.intelectsoft.quickpos.EPOSService.Results.AssortmentList;
 import md.intelectsoft.quickpos.EPOSService.Results.FiscalDevice;
-import md.intelectsoft.quickpos.EPOSService.Results.GetAssortmentList;
 import md.intelectsoft.quickpos.EPOSService.Results.GetUsersList;
 import md.intelectsoft.quickpos.EPOSService.Results.GetWorkplaceSettings;
 import md.intelectsoft.quickpos.EPOSService.Results.PaymentType;
@@ -46,10 +40,13 @@ import md.intelectsoft.quickpos.Realm.Promotion;
 import md.intelectsoft.quickpos.Realm.localStorage.AssortmentRealm;
 import md.intelectsoft.quickpos.Realm.localStorage.Barcodes;
 import md.intelectsoft.quickpos.Realm.localStorage.QuickGroupRealm;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefSettings;
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefWorkPlaceSettings;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefSettings;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefWorkPlaceSettings;
 
 public class FragmentSyncPage extends Fragment {
     private TextView mLastSync;
@@ -142,12 +139,11 @@ public class FragmentSyncPage extends Fragment {
         return rootViewAdmin;
     }
 
-    private void readAssortment (final Call<GetAssortmentList> assortiment){
-        assortiment.enqueue(new Callback<GetAssortmentList>() {
+    private void readAssortment (final Call<AssortmentList> assortiment){
+        assortiment.enqueue(new Callback<AssortmentList>() {
             @Override
-            public void onResponse(Call<GetAssortmentList> call, Response<GetAssortmentList> response) {
-                GetAssortmentList assortiment_body = response.body();
-                AssortmentList result = assortiment_body != null ? assortiment_body.getAssortmentList() : null;
+            public void onResponse(Call<AssortmentList> call, Response<AssortmentList> response) {
+                AssortmentList result = response.body();
 
                 int errorecode = 101;
                 if (result != null) {
@@ -233,7 +229,7 @@ public class FragmentSyncPage extends Fragment {
                 }
             }
             @Override
-            public void onFailure(Call<GetAssortmentList> call, Throwable t) {
+            public void onFailure(Call<AssortmentList> call, Throwable t) {
                 pgH.dismiss();
                 Toast.makeText(getContext(), "Errore sync assortment: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -354,7 +350,7 @@ public class FragmentSyncPage extends Fragment {
             String uri = sharedPrefSettings.getString("URI",null);
             EposServiceAPI commandServices = EPOSRetrofitClient.getApiEposService(uri);
 
-            final Call<GetAssortmentList> assortiment = commandServices.getAssortmentList(token, workplaceId);
+            final Call<AssortmentList> assortiment = commandServices.getAssortmentList(token, workplaceId);
             readAssortment(assortiment);
             return null;
         }

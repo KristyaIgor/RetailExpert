@@ -128,7 +128,7 @@ public class BillListRealmRCAdapter extends RealmRecyclerViewAdapter<Bill, BillL
             sum.setText("MDL " + String.format("%.2f", bill.getTotalDiscount()));
             client.setText(bill.getDiscountCardNumber());
             payType.setText(bill.getDiscountCardId());
-            numberBill.setText(String.valueOf(bill.getShiftReceiptNumSoftware()));
+            numberBill.setText(String.valueOf(bill.getShiftNumberSoftware()));
             hour.setText(simpleDateFormatHourMD.format(bill.getCreateDate()));
             date.setText(simpleDateFormatMD.format(bill.getCreateDate()));
 

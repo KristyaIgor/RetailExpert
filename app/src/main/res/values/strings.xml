@@ -9,8 +9,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_sales">Sales</string>
-    <string name="menu_orders">Orders</string>
-    <string name="menu_products">Products</string>
+    <string name="menu_orders">Bills</string>
 
 
     <!-- Verifone string data -->
@@ -443,4 +442,6 @@
     <string name="cod_de_activare">Cod de activare</string>
     <string name="title_shift_list">Shifts</string>
     <string name="title_shift_detail">Shift Detail</string>
+
+    <string name="calculator_delete"><![CDATA[<-]]></string>
 </resources>

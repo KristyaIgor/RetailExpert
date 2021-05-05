@@ -92,7 +92,7 @@ public class ListTicketsRealmRCAdapter extends RealmRecyclerViewAdapter<Bill, Li
             TextView total = dialogView.findViewById(R.id.tv_total_for_bill);
             RecyclerView ticketContent = dialogView.findViewById(R.id.rc_content_tickets);
 
-            String name = "Shift " + shiftName + " from " + simpleShiftDateFormatMD.format(shiftDate) + " - " + "Check No: " + item.getShiftReceiptNumSoftware();
+            String name = "Shift " + shiftName + " from " + simpleShiftDateFormatMD.format(shiftDate) + " - " + "Check No: " + item.getShiftNumberSoftware();
             nameShiftBill.setText(name);
 
             total.setText(String.valueOf(item.getTotalSum()) + " MDL");
@@ -143,7 +143,7 @@ public class ListTicketsRealmRCAdapter extends RealmRecyclerViewAdapter<Bill, Li
         }
 
         private void bind(Bill bill) {
-            nrBill.setText(String.valueOf(bill.getShiftReceiptNumSoftware()));
+            nrBill.setText(String.valueOf(bill.getShiftNumberSoftware()));
             createdDate.setText(simpleDateFormatMD.format(bill.getCreateDate()));
             if(bill.getCloseDate() != 0)
                 closedDate.setText(simpleDateFormatMD.format(bill.getCloseDate()));

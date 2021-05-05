@@ -17,8 +17,8 @@ import md.intelectsoft.quickpos.R;
 import md.intelectsoft.quickpos.Realm.localStorage.AssortmentRealm;
 import md.intelectsoft.quickpos.Realm.localStorage.Barcodes;
 
-import static md.intelectsoft.quickpos.phoneMode.ui.sales.SalesFragment.isIsViewWithCatalog;
-import static md.intelectsoft.quickpos.phoneMode.ui.sales.SalesFragment.setAssortmentClicked;
+import static md.intelectsoft.quickpos.phoneMode.activity.MainActivityPhone.addToCart;
+import static md.intelectsoft.quickpos.phoneMode.activity.MainActivityPhone.isIsViewWithCatalog;
 
 
 /**
@@ -81,7 +81,7 @@ public class AssortmentListGridAdapter extends ArrayAdapter<AssortmentRealm> {
                 viewHolder.layoutParent.setOnClickListener(v -> {
                     if(assortmentItemActionListener != null)
                         assortmentItemActionListener.onItemTap(viewHolder.productImageCopy);
-                    setAssortmentClicked(item);
+                    addToCart(item);
                 });
             }
         }
@@ -115,7 +115,7 @@ public class AssortmentListGridAdapter extends ArrayAdapter<AssortmentRealm> {
                 viewHolder.layoutParent.setOnClickListener(v -> {
                     if(assortmentItemActionListener != null)
                         assortmentItemActionListener.onItemTap(viewHolder.productImageCopy);
-                    setAssortmentClicked(item);
+                    addToCart(item);
                 });
 
 
