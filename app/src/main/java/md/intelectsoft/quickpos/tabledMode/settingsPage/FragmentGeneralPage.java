@@ -29,7 +29,7 @@ import md.intelectsoft.quickpos.SplashActivity;
 import md.intelectsoft.quickpos.tabledMode.activity.MainTabledActivity;
 import md.intelectsoft.quickpos.utils.LocaleHelper;
 
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefSettings;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefSettings;
 
 
 /**

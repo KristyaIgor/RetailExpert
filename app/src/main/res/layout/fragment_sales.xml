@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".phoneMode.ui.sales.SalesFragment">
+    tools:showIn="@layout/app_bar_main">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_pay_bill"
+        android:id="@+id/btn_new_sales"
         style="@style/Widget.MaterialComponents.GreenButtonCornersLeft"
         android:layout_width="0dp"
         android:layout_height="55dp"
@@ -18,7 +19,8 @@
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/mtrbtn_pay_cart" />
+        app:layout_constraintTop_toTopOf="@+id/mtrbtn_pay_cart"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mtrbtn_pay_cart"
@@ -33,18 +35,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/btn_pay_bill" />
+        app:layout_constraintStart_toEndOf="@+id/btn_new_sales" />
 
     <md.intelectsoft.quickpos.utils.SearchView
         android:id="@+id/searchProducts"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:translationZ="1dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageButtonBackToFolderUp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -73,7 +75,7 @@
         tools:listitem="@layout/item_grid_multi_columns" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/textSelectCountOfNext"
         android:layout_width="36dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -81,10 +83,12 @@
         android:gravity="center"
         android:padding="4dp"
         android:text="x 1"
+        android:clickable="true"
         android:textColor="@color/gray_stroke"
         app:layout_constraintBottom_toBottomOf="@+id/imageChangeGridColumns"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageChangeGridColumns" />
+        app:layout_constraintTop_toTopOf="@+id/imageChangeGridColumns"
+        android:focusable="true" />
 
     <ImageView
         android:id="@+id/imageChangeGridColumns"
@@ -94,8 +98,22 @@
         android:layout_marginEnd="16dp"
         android:padding="4dp"
 
-        app:layout_constraintEnd_toStartOf="@+id/textView6"
+        app:layout_constraintEnd_toStartOf="@+id/textSelectCountOfNext"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_grid_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/imageButtonBackToFolderUp"
+        android:layout_width="45dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_icon_arrow_left"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/gridProducts"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

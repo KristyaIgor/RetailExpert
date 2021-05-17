@@ -12,8 +12,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSecondary</item>
         <!-- Customize your theme here. -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/blueItem</item>
 
+    </style>
 
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorControlNormal">@color/white</item>
     </style>
 
     <style name="Widget.MaterialComponents.GreenButton" parent="Widget.AppCompat.Button">
@@ -29,7 +34,9 @@
         <item name="android:insetRight">0dp</item>
         <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
         <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
-        <item name="android:stateListAnimator" ns2:ignore="NewApi">@animator/mtrl_btn_state_list_anim</item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">
+            @animator/mtrl_btn_state_list_anim
+        </item>
         <item name="cornerRadius">@null</item>
         <item name="elevation">@dimen/mtrl_btn_elevation</item>
         <item name="iconPadding">@dimen/mtrl_btn_icon_padding</item>
@@ -37,6 +44,31 @@
         <item name="rippleColor">@color/mtrl_btn_ripple_color</item>
         <item name="backgroundTint">@color/mtr_btn_green_tint</item>
         <item name="shapeAppearance">?attr/shapeAppearanceSmallComponent</item>
+    </style>
+
+    <style name="Widget.MaterialComponents.GreenButtonCornersRound" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="enforceMaterialTheme">true</item>
+        <item name="enforceTextAppearance">true</item>
+        <item name="android:textAppearance">?attr/textAppearanceButton</item>
+        <item name="android:textColor">@color/mtrl_btn_text_color_selector</item>
+        <item name="android:paddingLeft">@dimen/mtrl_btn_padding_left</item>
+        <item name="android:paddingRight">@dimen/mtrl_btn_padding_right</item>
+        <item name="android:paddingTop">@dimen/mtrl_btn_padding_top</item>
+        <item name="android:paddingBottom">@dimen/mtrl_btn_padding_bottom</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
+        <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">
+            @animator/mtrl_btn_state_list_anim
+        </item>
+        <item name="strokeColor">@color/green</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="elevation">@dimen/mtrl_btn_elevation</item>
+        <item name="iconPadding">@dimen/mtrl_btn_icon_padding</item>
+        <item name="iconTint">@color/mtrl_btn_text_color_selector</item>
+        <item name="rippleColor">@color/mtrl_btn_ripple_color</item>
+        <item name="backgroundTint">@color/mtr_btn_green_tint</item>
     </style>
 
     <style name="Widget.MaterialComponents.GreenButtonCornersLeft" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -52,7 +84,9 @@
         <item name="android:insetRight">0dp</item>
         <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
         <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
-        <item name="android:stateListAnimator" ns2:ignore="NewApi">@animator/mtrl_btn_state_list_anim</item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">
+            @animator/mtrl_btn_state_list_anim
+        </item>
         <item name="strokeColor">@color/green</item>
         <item name="strokeWidth">2dp</item>
         <item name="elevation">@dimen/mtrl_btn_elevation</item>
@@ -62,6 +96,7 @@
         <item name="backgroundTint">@color/mtr_btn_green_tint</item>
         <item name="shapeAppearance">@style/MyShapeAppearanceLeftRounded</item>
     </style>
+
     <style name="Widget.MaterialComponents.GreenButtonCornersRight" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="enforceMaterialTheme">true</item>
         <item name="enforceTextAppearance">true</item>
@@ -75,7 +110,9 @@
         <item name="android:insetRight">0dp</item>
         <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
         <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
-        <item name="android:stateListAnimator" ns2:ignore="NewApi">@animator/mtrl_btn_state_list_anim</item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">
+            @animator/mtrl_btn_state_list_anim
+        </item>
         <item name="strokeColor">@color/green</item>
         <item name="strokeWidth">2dp</item>
         <item name="elevation">@dimen/mtrl_btn_elevation</item>
@@ -93,6 +130,7 @@
         <item name="cornerSizeTopLeft">0dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
+
     <style name="MyShapeAppearanceLeftRounded">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">0dp</item>
@@ -133,7 +171,9 @@
         <item name="android:insetRight">0dp</item>
         <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
         <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
-        <item name="android:stateListAnimator" ns2:ignore="NewApi">@animator/mtrl_btn_state_list_anim </item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">
+            @animator/mtrl_btn_state_list_anim
+        </item>
         <item name="cornerRadius">40dp</item>
         <item name="elevation">@dimen/mtrl_btn_elevation</item>
         <item name="iconPadding">@dimen/mtrl_btn_icon_padding</item>
@@ -156,13 +196,39 @@
         <item name="android:insetRight">0dp</item>
         <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
         <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
-        <item name="android:stateListAnimator" ns2:ignore="NewApi">@animator/mtrl_btn_state_list_anim</item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">
+            @animator/mtrl_btn_state_list_anim
+        </item>
         <item name="cornerRadius">0dp</item>
         <item name="elevation">0dp</item>
         <item name="iconPadding">@dimen/mtrl_btn_icon_padding</item>
         <item name="iconTint">@color/mtrl_btn_text_color_selector</item>
         <item name="rippleColor">@color/mtrl_btn_ripple_color</item>
         <item name="backgroundTint">@color/mtrl_btn_selector_gray</item>
+        <item name="shapeAppearance">?attr/shapeAppearanceSmallComponent</item>
+    </style>
+
+
+    <style name="Widget.MaterialComponents.CustomButtonFinRep" parent="Widget.AppCompat.Button">
+        <item name="enforceMaterialTheme">true</item>
+        <item name="enforceTextAppearance">true</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Material</item>
+        <item name="android:textColor">@color/mtrl_btn_text_color_selector</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">@dimen/mtrl_btn_padding_bottom</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
+        <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">@animator/mtrl_btn_state_list_anim_v0</item>
+        <item name="cornerRadius">10dp</item>
+        <item name="elevation">5dp</item>
+        <item name="iconPadding">@dimen/mtrl_btn_icon_padding</item>
+        <item name="iconTint">@color/mtrl_btn_text_color_selector</item>
+        <item name="rippleColor">@color/mtrl_btn_ripple_color</item>
+        <item name="backgroundTint">@color/mtrl_btn_selector_whites</item>
         <item name="shapeAppearance">?attr/shapeAppearanceSmallComponent</item>
     </style>
 
@@ -179,7 +245,9 @@
         <item name="android:insetRight">0dp</item>
         <item name="android:insetTop">@dimen/mtrl_btn_inset</item>
         <item name="android:insetBottom">@dimen/mtrl_btn_inset</item>
-        <item name="android:stateListAnimator" ns2:ignore="NewApi">@animator/mtrl_btn_state_list_anim</item>
+        <item name="android:stateListAnimator" ns2:ignore="NewApi">
+            @animator/mtrl_btn_state_list_anim
+        </item>
         <item name="cornerRadius">@null</item>
         <item name="elevation">@dimen/mtrl_btn_elevation</item>
         <item name="iconPadding">@dimen/mtrl_btn_icon_padding</item>

@@ -27,7 +27,7 @@ import md.intelectsoft.quickpos.tabledMode.settingsPage.FragmentGeneralPage;
 import md.intelectsoft.quickpos.tabledMode.settingsPage.FragmentSyncPage;
 import md.intelectsoft.quickpos.tabledMode.settingsPage.FragmentUpdatePage;
 import md.intelectsoft.quickpos.utils.BaseEnum;
-import md.intelectsoft.quickpos.utils.POSApplication;
+import md.intelectsoft.quickpos.POSApplication;
 import md.intelectsoft.quickpos.utils.Rfc2898DerivesBytes;
 
 public class SettingsTabledActivity extends AppCompatActivity {

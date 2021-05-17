@@ -99,7 +99,6 @@ import md.intelectsoft.quickpos.EPOSService.Results.Assortment;
 import md.intelectsoft.quickpos.EPOSService.Results.AssortmentList;
 import md.intelectsoft.quickpos.EPOSService.Results.AuthenticateUser;
 import md.intelectsoft.quickpos.EPOSService.Results.FiscalDevice;
-import md.intelectsoft.quickpos.EPOSService.Results.GetAssortmentList;
 import md.intelectsoft.quickpos.EPOSService.Results.GetClientCardInfo;
 import md.intelectsoft.quickpos.EPOSService.Results.GetClientCardInfoResult;
 import md.intelectsoft.quickpos.EPOSService.Results.GetUsersList;
@@ -118,10 +117,6 @@ import md.intelectsoft.quickpos.FiscalService.FiscalServiceRetrofitClient;
 import md.intelectsoft.quickpos.FiscalService.Result.SimpleResult;
 import md.intelectsoft.quickpos.R;
 import md.intelectsoft.quickpos.Realm.Promotion;
-import md.intelectsoft.quickpos.tabledMode.datecs.PrinterManager;
-import md.intelectsoft.quickpos.tabledMode.fragments.FragmentAssortmentList;
-import md.intelectsoft.quickpos.tabledMode.fragments.FragmentBills;
-
 import md.intelectsoft.quickpos.Realm.localStorage.AssortmentRealm;
 import md.intelectsoft.quickpos.Realm.localStorage.Barcodes;
 import md.intelectsoft.quickpos.Realm.localStorage.Bill;
@@ -130,23 +125,26 @@ import md.intelectsoft.quickpos.Realm.localStorage.BillString;
 import md.intelectsoft.quickpos.Realm.localStorage.History;
 import md.intelectsoft.quickpos.Realm.localStorage.QuickGroupRealm;
 import md.intelectsoft.quickpos.Realm.localStorage.Shift;
-import md.intelectsoft.quickpos.utils.BaseEnum;
-import md.intelectsoft.quickpos.utils.POSApplication;
-import md.intelectsoft.quickpos.utils.Rfc2898DerivesBytes;
 import md.intelectsoft.quickpos.tabledMode.adapters.BillStringInBillRealmListAdapter;
 import md.intelectsoft.quickpos.tabledMode.adapters.NewBillStringsRealmRCAdapter;
 import md.intelectsoft.quickpos.tabledMode.adapters.TabQuickMenuAdapter;
 import md.intelectsoft.quickpos.tabledMode.connectors.AbstractConnector;
 import md.intelectsoft.quickpos.tabledMode.connectors.UsbDeviceConnector;
+import md.intelectsoft.quickpos.tabledMode.datecs.PrinterManager;
+import md.intelectsoft.quickpos.tabledMode.fragments.FragmentAssortmentList;
+import md.intelectsoft.quickpos.tabledMode.fragments.FragmentBills;
+import md.intelectsoft.quickpos.utils.BaseEnum;
+import md.intelectsoft.quickpos.POSApplication;
+import md.intelectsoft.quickpos.utils.Rfc2898DerivesBytes;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static md.intelectsoft.quickpos.utils.BaseEnum.DATECS_USB_VID;
 import static md.intelectsoft.quickpos.utils.BaseEnum.FTDI_USB_VID;
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefSettings;
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefWorkPlaceSettings;
-import static md.intelectsoft.quickpos.utils.POSApplication.deviceId;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefSettings;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefWorkPlaceSettings;
+import static md.intelectsoft.quickpos.POSApplication.deviceId;
 
 
 public class MainTabledActivity extends AppCompatActivity {
@@ -1133,7 +1131,7 @@ public class MainTabledActivity extends AppCompatActivity {
 
                                History history = new History();
                                history.setDate(new Date().getTime());
-                               history.setMsg(context.getString(R.string.message_bill_deleted) + bill.getShiftReceiptNumSoftware());
+                               history.setMsg(context.getString(R.string.message_bill_deleted) + bill.getShiftNumberSoftware());
                                history.setType(BaseEnum.History_DeletedBill);
                                realm.insert(history);
 
@@ -1148,7 +1146,7 @@ public class MainTabledActivity extends AppCompatActivity {
                         }
                         drawer.closeDrawer(GravityCompat.END);
 
-                        Snackbar.make(view, context.getString(R.string.text_bill) + bill.getShiftReceiptNumSoftware() + context.getString(R.string.message_is_deleted), Snackbar.LENGTH_LONG)
+                        Snackbar.make(view, context.getString(R.string.text_bill) + bill.getShiftNumberSoftware() + context.getString(R.string.message_is_deleted), Snackbar.LENGTH_LONG)
                                 .setAction(R.string.text_undo, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -1161,7 +1159,7 @@ public class MainTabledActivity extends AppCompatActivity {
 
                                                 History history = new History();
                                                 history.setDate(new Date().getTime());
-                                                history.setMsg(context.getString(R.string.message_bill_returned_open) + bill.getShiftReceiptNumSoftware());
+                                                history.setMsg(context.getString(R.string.message_bill_returned_open) + bill.getShiftNumberSoftware());
                                                 history.setType(BaseEnum.History_RecreatBill);
                                                 realm.insert(history);
                                             }
@@ -1195,12 +1193,12 @@ public class MainTabledActivity extends AppCompatActivity {
         });
         btnPayBill.setOnClickListener(view ->{
             openedBillId = bill.getId();
-            paymentBill(bill.getSumWithDiscount());
+            paymentBill(bill.getTotalDiscount());
         });
         closeDrawer.setOnClickListener(view -> drawer.closeDrawer(GravityCompat.END));
 
         ListView listContent = drawerConstraint.findViewById(R.id.list_string_item);
-        numberBill.setText(String.valueOf(bill.getShiftReceiptNumSoftware()));
+        numberBill.setText(String.valueOf(bill.getShiftNumberSoftware()));
         final RealmResults<BillString>[] results = new RealmResults[]{null};
         mRealm.executeTransaction(realm -> {
             results[0] = realm.where(BillString.class).equalTo("billID",bill.getId()).and().equalTo("isDeleted",false).findAll();
@@ -1211,9 +1209,9 @@ public class MainTabledActivity extends AppCompatActivity {
             BillStringInBillRealmListAdapter adapter = new BillStringInBillRealmListAdapter(results[0]);
             listContent.setAdapter(adapter);
         }
-        totalBill.setText(String.format("%.2f",bill.getSumWithDiscount()).replace(",","."));
+        totalBill.setText(String.format("%.2f",bill.getTotalDiscount()).replace(",","."));
         clientBill.setText(bill.getDiscountCardNumber());
-        discount.setText(String.format("%.2f", bill.getSum() - bill.getSumWithDiscount()).replace(",","."));
+        discount.setText(String.format("%.2f", bill.getTotalSum() - bill.getTotalDiscount()).replace(",","."));
     }
 
 
@@ -1295,7 +1293,7 @@ public class MainTabledActivity extends AppCompatActivity {
             int bilNumber = 0;
             Bill bilResult = mRealm.where(Bill.class).equalTo("id",openedBillId).findFirst();
             if(bilResult != null)
-                bilNumber = bilResult.getShiftReceiptNumSoftware();
+                bilNumber = bilResult.getShiftNumberSoftware();
 
             double inputSum = 0;
             try {
@@ -1373,7 +1371,7 @@ public class MainTabledActivity extends AppCompatActivity {
                                         mRealm.executeTransaction(realm ->{
                                             Bill bill = realm.where(Bill.class).equalTo("id",openedBillId).findFirst();
                                             if(bill != null){
-                                                bill.setReceiptNumFiscalMemory(finalResultCloseReceip);
+                                                bill.setGlobalNumber(finalResultCloseReceip);
                                                 bill.setState(1);
                                                 bill.setCloseDate(new Date().getTime());
                                                 bill.setClosedBy(POSApplication.getApplication().getUser().getId());
@@ -1420,7 +1418,7 @@ public class MainTabledActivity extends AppCompatActivity {
                                 mRealm.executeTransaction(realm ->{
                                     Bill bill = realm.where(Bill.class).equalTo("id",openedBillId).findFirst();
                                     if(bill != null){
-                                        bill.setReceiptNumFiscalMemory(0);
+                                        bill.setGlobalNumber(0);
                                         bill.setState(1);
                                         bill.setCloseDate(new Date().getTime());
                                         bill.setClosedBy(POSApplication.getApplication().getUser().getId());
@@ -1471,7 +1469,7 @@ public class MainTabledActivity extends AppCompatActivity {
                                     mRealm.executeTransaction(realm ->{
                                         Bill bill = realm.where(Bill.class).equalTo("id",openedBillId).findFirst();
                                         if(bill != null){
-                                            bill.setReceiptNumFiscalMemory(finalResultCloseReceip);
+                                            bill.setGlobalNumber(finalResultCloseReceip);
                                             bill.setState(1);
                                             bill.setCloseDate(new Date().getTime());
                                             bill.setClosedBy(POSApplication.getApplication().getUser().getId());
@@ -1517,7 +1515,7 @@ public class MainTabledActivity extends AppCompatActivity {
                             mRealm.executeTransaction(realm ->{
                                 Bill bill = realm.where(Bill.class).equalTo("id",openedBillId).findFirst();
                                 if(bill != null){
-                                    bill.setReceiptNumFiscalMemory(0);
+                                    bill.setGlobalNumber(0);
                                     bill.setState(1);
                                     bill.setCloseDate(new Date().getTime());
                                     bill.setClosedBy(POSApplication.getApplication().getUser().getId());
@@ -1556,7 +1554,7 @@ public class MainTabledActivity extends AppCompatActivity {
                     mRealm.executeTransaction(realm ->{
                         Bill bill = realm.where(Bill.class).equalTo("id",openedBillId).findFirst();
                         if(bill != null){
-                            bill.setReceiptNumFiscalMemory(0);
+                            bill.setGlobalNumber(0);
                             bill.setState(1);
                             bill.setCloseDate(new Date().getTime());
                             bill.setClosedBy(POSApplication.getApplication().getUser().getId());
@@ -1616,17 +1614,17 @@ public class MainTabledActivity extends AppCompatActivity {
         mRealm.executeTransaction(realm -> {
 
             billString.setDeleted(true);
-            billString.setDeletionDate(new Date().getTime());
+            billString.setDeletedDate(new Date().getTime());
             billString.setDeleteBy(POSApplication.getApplication().getUserId());
 
             Bill billEntryRealmResults = realm.where(Bill.class).equalTo("id", openedBillId).findFirst();
             if (billEntryRealmResults != null) {
-                billEntryRealmResults.setSum(billEntryRealmResults.getSum()  - (billString.getPrice() * billString.getQuantity()));
-                billEntryRealmResults.setSumWithDiscount(billEntryRealmResults.getSumWithDiscount() - (billString.getPriceWithDiscount() * billString.getQuantity()));
+                billEntryRealmResults.setTotalSum(billEntryRealmResults.getTotalSum()  - (billString.getBasePrice() * billString.getQuantity()));
+                billEntryRealmResults.setTotalDiscount(billEntryRealmResults.getTotalDiscount() - (billString.getPriceWithDiscount() * billString.getQuantity()));
 
-                btnPay.setText("MDL " + String.format("%.2f", billEntryRealmResults.getSumWithDiscount()).replace(",","."));
-                tvDiscountBill.setText(String.format("%.2f",billEntryRealmResults.getSum() - billEntryRealmResults.getSumWithDiscount()).replace(",","."));
-                tvSubTotalBill.setText(String.format("%.2f", billEntryRealmResults.getSum()).replace(",","."));
+                btnPay.setText("MDL " + String.format("%.2f", billEntryRealmResults.getTotalDiscount()).replace(",","."));
+                tvDiscountBill.setText(String.format("%.2f",billEntryRealmResults.getTotalSum() - billEntryRealmResults.getTotalDiscount()).replace(",","."));
+                tvSubTotalBill.setText(String.format("%.2f", billEntryRealmResults.getTotalSum()).replace(",","."));
             }
             History history = new History();
             history.setDate(new Date().getTime());
@@ -1666,12 +1664,12 @@ public class MainTabledActivity extends AppCompatActivity {
 
             Bill billEntryRealmResults = realm.where(Bill.class).equalTo("id", openedBillId).findFirst();
             if (billEntryRealmResults != null) {
-                billEntryRealmResults.setSum(sumTotal);
-                billEntryRealmResults.setSumWithDiscount(sumWithDisc);
+                billEntryRealmResults.setTotalSum(sumTotal);
+                billEntryRealmResults.setTotalDiscount(sumWithDisc);
 
-                btnPay.setText("MDL " + String.format("%.2f", billEntryRealmResults.getSumWithDiscount()).replace(",","."));
-                tvDiscountBill.setText(String.format("%.2f",billEntryRealmResults.getSum() - billEntryRealmResults.getSumWithDiscount()).replace(",","."));
-                tvSubTotalBill.setText(String.format("%.2f", billEntryRealmResults.getSum()).replace(",","."));
+                btnPay.setText("MDL " + String.format("%.2f", billEntryRealmResults.getTotalDiscount()).replace(",","."));
+                tvDiscountBill.setText(String.format("%.2f",billEntryRealmResults.getTotalSum() - billEntryRealmResults.getTotalDiscount()).replace(",","."));
+                tvSubTotalBill.setText(String.format("%.2f", billEntryRealmResults.getTotalSum()).replace(",","."));
             }
         });
     }
@@ -1703,11 +1701,11 @@ public class MainTabledActivity extends AppCompatActivity {
             Bill bill = new Bill();
             bill.setId(uid);
             bill.setCreateDate(new Date().getTime());
-            bill.setShiftReceiptNumSoftware(shift.getBillCounter() + 1);
-            bill.setAuthor(POSApplication.getApplication().getUser().getId());
-            bill.setAuthorName(POSApplication.getApplication().getUser().getFullName());
-            bill.setSumWithDiscount(0.0);
-            bill.setSum(0.0);
+            bill.setShiftNumberSoftware(shift.getBillCounter() + 1);
+            bill.setUserId(POSApplication.getApplication().getUser().getId());
+            bill.setUserName(POSApplication.getApplication().getUser().getFullName());
+            bill.setTotalDiscount(0.0);
+            bill.setTotalSum(0.0);
             bill.setState(0);
             bill.setShiftId(shift.getId());
             bill.setSynchronized(false);
@@ -1729,7 +1727,7 @@ public class MainTabledActivity extends AppCompatActivity {
 
                 History createdBill = new History();
                 createdBill.setDate(bill.getCreateDate());
-                createdBill.setMsg(context.getString(R.string.message_bill_created_nr) + bill.getShiftReceiptNumSoftware());
+                createdBill.setMsg(context.getString(R.string.message_bill_created_nr) + bill.getShiftNumberSoftware());
                 createdBill.setType(BaseEnum.History_CreateBill);
                 realm.insert(createdBill);
 
@@ -1763,11 +1761,11 @@ public class MainTabledActivity extends AppCompatActivity {
         }
 
         if(openedBillId != null){
-            if(lastBillString != null && assortmentEntry.getId().equals(lastBillString.getAssortmentExternID()) ){
+            if(lastBillString != null && assortmentEntry.getId().equals(lastBillString.getAssortmentId()) ){
                 double sumBefore = lastBillString.getSum();
                 double sumWithDiscBefore = lastBillString.getSumWithDiscount();
                 double quantity = lastBillString.getQuantity() + count;
-                double sum = lastBillString.getPrice() * quantity;
+                double sum = lastBillString.getBasePrice() * quantity;
                 double sumWithDisc = lastBillString.getPriceWithDiscount() * quantity;
                 String id = lastBillString.getId();
 
@@ -1781,14 +1779,14 @@ public class MainTabledActivity extends AppCompatActivity {
 
                     Bill billEntryRealmResults = realm.where(Bill.class).equalTo("id", openedBillId).findFirst();
                     if (billEntryRealmResults != null) {
-                        billEntryRealmResults.setSum(billEntryRealmResults.getSum() + (sum - sumBefore));
-                        billEntryRealmResults.setSumWithDiscount(billEntryRealmResults.getSumWithDiscount() + (sumWithDisc - sumWithDiscBefore));
+                        billEntryRealmResults.setTotalSum(billEntryRealmResults.getTotalSum() + (sum - sumBefore));
+                        billEntryRealmResults.setTotalDiscount(billEntryRealmResults.getTotalDiscount() + (sumWithDisc - sumWithDiscBefore));
                     }
                 });
             }
             else{
                 BillString billString = new BillString();
-                double priceWithDisc = assortmentEntry.getPrice();
+                double priceWithDisc = assortmentEntry.getBasePrice();
 
                 CheckedAssortmentItemToPromo assortmentItemToPromo = checkedAssortmentItemToPromo(assortmentEntry);
 
@@ -1797,23 +1795,23 @@ public class MainTabledActivity extends AppCompatActivity {
                     priceWithDisc = assortmentItemToPromo.getPromoPrice();
                 }
 
-                billString.setCreateBy(POSApplication.getApplication().getUser().getId());
-                billString.setAssortmentExternID(assortmentEntry.getId());
+                billString.setUserId(POSApplication.getApplication().getUser().getId());
+                billString.setAssortmentId(assortmentEntry.getId());
                 billString.setAssortmentFullName(assortmentEntry.getName());
                 billString.setBillID(openedBillId);
                 billString.setId(UUID.randomUUID().toString());
                 billString.setQuantity(count);
-                billString.setPrice(assortmentEntry.getPrice());
+                billString.setBasePrice(assortmentEntry.getBasePrice());
                 billString.setPriceLineID(assortmentEntry.getPriceLineId());
                 billString.setAllowNonInteger(assortmentEntry.isAllowNonInteger());
                 billString.setAllowDiscounts(assortmentEntry.isAllowDiscounts());
                 billString.setBarcode(barcode);
-                billString.setVat(assortmentEntry.getVat());
+                billString.setVatValue(assortmentEntry.getVat());
                 billString.setCreateDate(new Date().getTime());
                 billString.setDeleted(false);
                 billString.setPriceWithDiscount(priceWithDisc);
 
-                billString.setSum(assortmentEntry.getPrice() * count);
+                billString.setSum(assortmentEntry.getBasePrice() * count);
                 billString.setSumWithDiscount(priceWithDisc * count);
 
                 double finalPriceWithDisc = priceWithDisc;
@@ -1821,8 +1819,8 @@ public class MainTabledActivity extends AppCompatActivity {
 
                 Bill billEntryRealmResults = realm.where(Bill.class).equalTo("id", openedBillId).findFirst();
                 if (billEntryRealmResults != null) {
-                    billEntryRealmResults.setSum(billEntryRealmResults.getSum() + (assortmentEntry.getPrice() * count));
-                    billEntryRealmResults.setSumWithDiscount(billEntryRealmResults.getSumWithDiscount() + (finalPriceWithDisc * count));
+                    billEntryRealmResults.setTotalSum(billEntryRealmResults.getTotalSum() + (assortmentEntry.getBasePrice() * count));
+                    billEntryRealmResults.setTotalDiscount(billEntryRealmResults.getTotalDiscount() + (finalPriceWithDisc * count));
                     billEntryRealmResults.getBillStrings().add(billString);
                 }
                     createBillString[0] = true;
@@ -2063,9 +2061,9 @@ public class MainTabledActivity extends AppCompatActivity {
                 recyclerView.smoothScrollToPosition(0);
 
             if(bill[0] != null){
-                btnPay.setText("MDL " + String.format("%.2f", bill[0].getSumWithDiscount()).replace(",","."));
-                tvDiscountBill.setText(String.format("%.2f",bill[0].getSum() - bill[0].getSumWithDiscount()).replace(",","."));
-                tvSubTotalBill.setText(String.format("%.2f", bill[0].getSum()).replace(",","."));
+                btnPay.setText("MDL " + String.format("%.2f", bill[0].getTotalDiscount()).replace(",","."));
+                tvDiscountBill.setText(String.format("%.2f",bill[0].getTotalSum() - bill[0].getTotalDiscount()).replace(",","."));
+                tvSubTotalBill.setText(String.format("%.2f", bill[0].getTotalSum()).replace(",","."));
             }
             else{
                 btnPay.setText(context.getString(R.string.text_mdl_0));
@@ -2804,7 +2802,7 @@ public class MainTabledActivity extends AppCompatActivity {
        int bilNumber = 0;
        Bill bilResult = mRealm.where(Bill.class).equalTo("id",openedBillId).findFirst();
        if(bilResult != null)
-           bilNumber = bilResult.getShiftReceiptNumSoftware();
+           bilNumber = bilResult.getShiftNumberSoftware();
 
        if(!tvInputSumBillForPayment.getText().toString().equals("")){
            double inputSum = 0;
@@ -2843,7 +2841,7 @@ public class MainTabledActivity extends AppCompatActivity {
                                mRealm.executeTransaction(realm ->{
                                    Bill bill = realm.where(Bill.class).equalTo("id",openedBillId).findFirst();
                                    if(bill != null){
-                                       bill.setReceiptNumFiscalMemory(finalResultCloseReceip);
+                                       bill.setGlobalNumber(finalResultCloseReceip);
                                        bill.setState(1);
                                        bill.setCloseDate(new Date().getTime());
                                        bill.setClosedBy(POSApplication.getApplication().getUser().getId());
@@ -2883,7 +2881,7 @@ public class MainTabledActivity extends AppCompatActivity {
                        mRealm.executeTransaction(realm ->{
                            Bill bill = realm.where(Bill.class).equalTo("id",openedBillId).findFirst();
                            if(bill != null){
-                               bill.setReceiptNumFiscalMemory(0);
+                               bill.setGlobalNumber(0);
                                bill.setState(1);
                                bill.setCloseDate(new Date().getTime());
                                bill.setClosedBy(POSApplication.getApplication().getUser().getId());
@@ -2908,7 +2906,7 @@ public class MainTabledActivity extends AppCompatActivity {
                    mRealm.executeTransaction(realm ->{
                        Bill bill = realm.where(Bill.class).equalTo("id",openedBillId).findFirst();
                        if(bill != null){
-                           bill.setReceiptNumFiscalMemory(0);
+                           bill.setGlobalNumber(0);
                            bill.setState(1);
                            bill.setCloseDate(new Date().getTime());
                            bill.setClosedBy(POSApplication.getApplication().getUser().getId());
@@ -3056,7 +3054,7 @@ public class MainTabledActivity extends AppCompatActivity {
                 CheckedAssortmentItemToPromo promo = checkedAssortmentItemToPromo(assortmentFind);
                 if (promo != null)
                     tvDiscountItem.setText("MDL " + String.format("%.2f", promo.getPromoPrice()).replace(",","."));
-                tvPriceItem.setText("MDL " + String.format("%.2f", assortmentFind.getPrice()).replace(",","."));
+                tvPriceItem.setText("MDL " + String.format("%.2f", assortmentFind.getBasePrice()).replace(",","."));
 
                 btn_add.setVisibility(View.VISIBLE);
                 btn_search.setVisibility(View.GONE);
@@ -3171,7 +3169,7 @@ public class MainTabledActivity extends AppCompatActivity {
                                 CheckedAssortmentItemToPromo promo = checkedAssortmentItemToPromo(assortmentFind);
                                 if (promo != null)
                                     tvDiscountItem.setText("MDL " + String.format("%.2f", promo.getPromoPrice()).replace(",", "."));
-                                tvPriceItem.setText("MDL " + String.format("%.2f", assortmentFind.getPrice()).replace(",", "."));
+                                tvPriceItem.setText("MDL " + String.format("%.2f", assortmentFind.getBasePrice()).replace(",", "."));
 
                                 btn_add.setVisibility(View.VISIBLE);
                                 btn_search.setVisibility(View.GONE);
@@ -3280,16 +3278,16 @@ public class MainTabledActivity extends AppCompatActivity {
         }
     }
 
-    private void readAssortment (final Call<GetAssortmentList> assortiment){
-        assortiment.enqueue(new Callback<GetAssortmentList>() {
+    private void readAssortment (final Call<AssortmentList> assortiment){
+        assortiment.enqueue(new Callback<AssortmentList>() {
             @Override
-            public void onResponse(Call<GetAssortmentList> call, Response<GetAssortmentList> response) {
-                GetAssortmentList assortiment_body = response.body();
-                AssortmentList result = assortiment_body != null ? assortiment_body.getAssortmentList() : null;
+            public void onResponse(Call<AssortmentList> call, Response<AssortmentList> response) {
+                AssortmentList assortiment_body = response.body();
+
 
                 int errorecode = 101;
-                if (result != null) {
-                    errorecode = result.getErrorCode();
+                if (assortiment_body != null) {
+                    errorecode = assortiment_body.getErrorCode();
                 }
                 if(errorecode == 0){
 
@@ -3300,7 +3298,7 @@ public class MainTabledActivity extends AppCompatActivity {
                         realm.delete(AssortmentRealm.class);
                     });
 
-                    List<Assortment> assortmentListData = result.getAssortments();
+                    List<Assortment> assortmentListData = assortiment_body.getAssortments();
                     mRealm.executeTransaction(realm -> {
 
                         for(Assortment assortmentServiceEntry: assortmentListData){
@@ -3330,7 +3328,7 @@ public class MainTabledActivity extends AppCompatActivity {
                             ass.setEnableSaleTimeRange(assortmentServiceEntry.getEnableSaleTimeRange());
                             ass.setMarking(assortmentServiceEntry.getMarking());
                             ass.setParentID(assortmentServiceEntry.getParentID());
-                            ass.setPrice(assortmentServiceEntry.getPrice());
+                            ass.setBasePrice(assortmentServiceEntry.getPrice());
                             ass.setPriceLineId(assortmentServiceEntry.getPriceLineId());
                             ass.setShortName(assortmentServiceEntry.getShortName());
                             ass.setVat(assortmentServiceEntry.getVAT());
@@ -3347,8 +3345,8 @@ public class MainTabledActivity extends AppCompatActivity {
                             realm.insert(ass);
                         }
 
-                        if(result.getQuickGroups() != null){
-                            for(QuickGroup quickGroup : result.getQuickGroups()){
+                        if(assortiment_body.getQuickGroups() != null){
+                            for(QuickGroup quickGroup : assortiment_body.getQuickGroups()){
                                 QuickGroupRealm quickGroupRealm = new QuickGroupRealm();
 
                                 String nameGroup = quickGroup.getName();
@@ -3371,7 +3369,7 @@ public class MainTabledActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onFailure(Call<GetAssortmentList> call, Throwable t) {
+            public void onFailure(Call<AssortmentList> call, Throwable t) {
                 Toast.makeText(context, "Error download assortment! Message: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 pgH.dismiss();
             }
@@ -3490,7 +3488,7 @@ public class MainTabledActivity extends AppCompatActivity {
             String uri = sharedPreferenceSettings.getString("URI",null);
             EposServiceAPI commandServices = EPOSRetrofitClient.getApiEposService(uri);
 
-            final Call<GetAssortmentList> assortiment = commandServices.getAssortmentList(tokenId, workPlaceID);
+            final Call<AssortmentList> assortiment = commandServices.getAssortmentList(tokenId, workPlaceID);
             readAssortment(assortiment);
             return null;
         }

@@ -1,9 +1,5 @@
 package md.intelectsoft.quickpos.phoneMode.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -19,9 +15,17 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -67,7 +71,7 @@ import md.intelectsoft.quickpos.EPOSService.Results.AuthenticateUser;
 import md.intelectsoft.quickpos.EPOSService.Results.TokenEPOS;
 import md.intelectsoft.quickpos.EPOSService.Results.User;
 import md.intelectsoft.quickpos.R;
-import md.intelectsoft.quickpos.utils.POSApplication;
+import md.intelectsoft.quickpos.POSApplication;
 import md.intelectsoft.quickpos.utils.Rfc2898DerivesBytes;
 import md.intelectsoft.quickpos.utils.SPFHelp;
 import retrofit2.Call;
@@ -116,17 +120,9 @@ public class AuthorizeActivity extends AppCompatActivity {
                     inputLayoutPasswordLogin.setError("Input the field!");
             }
             else{
-
-
                 if(SPFHelp.getInstance().getBoolean("FirstStart", false))
                     authenticateUser(login, password);
                 else{
-//                    progressDialog.setMessage("Authenticate user...");
-//                    progressDialog.setCancelable(false);
-//                    progressDialog.setIndeterminate(true);
-//                    progressDialog.show();
-
-                    //hash SHA1 password
                     String passwordGenerate = getSHA1HashUserPassword("This is the code for UserPass", password).replace("\n","");
 
                     //search in local data base user with such data
@@ -144,7 +140,7 @@ public class AuthorizeActivity extends AppCompatActivity {
                             authenticateUser(login,password);
                         }
                         else {
-                            Intent main = new Intent(context, SalesActivity.class);
+                            Intent main = new Intent(context, MainActivityPhone.class);
                             startActivity(main);
                             finish();
                         }
@@ -296,7 +292,7 @@ public class AuthorizeActivity extends AppCompatActivity {
                         POSApplication.getApplication().setUserLogin(login);
 
                         SPFHelp.getInstance().putBoolean("FirstStart", false);
-                        Intent main = new Intent(context, SalesActivity.class);
+                        Intent main = new Intent(context, MainActivityPhone.class);
                         startActivity(main);
                         finish();
                     }
@@ -460,7 +456,7 @@ public class AuthorizeActivity extends AppCompatActivity {
         registerApplication.setProductType(BrokerServiceEnum.SalesAgent);
         registerApplication.setOSVersion(osVersion);
 
-        Call<RegisterApplication> getURICall = brokerServiceAPI.getURICall(registerApplication);
+        Call<RegisterApplication> getURICall = brokerServiceAPI.getURI(registerApplication);
 
         if (fromRegistration) {
             progressDialog.setMessage("Obtain URI...");
@@ -727,5 +723,21 @@ public class AuthorizeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(@NonNull MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                v.clearFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+
+        return super.dispatchTouchEvent(event);
     }
 }

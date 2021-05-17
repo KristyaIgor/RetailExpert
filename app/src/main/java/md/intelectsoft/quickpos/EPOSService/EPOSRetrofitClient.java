@@ -1,6 +1,5 @@
 package md.intelectsoft.quickpos.EPOSService;
 
-import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.util.concurrent.TimeUnit;
 
@@ -11,13 +10,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import md.intelectsoft.quickpos.BrokerService.BrokerServiceAPI;
-import md.intelectsoft.quickpos.BuildConfig;
-import okhttp3.Credentials;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -39,7 +32,7 @@ public class EPOSRetrofitClient {
     private static OkHttpClient getOkHttpClient() {
         return new OkHttpClient.Builder()
                 .connectTimeout(8, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
                 .writeTimeout(8, TimeUnit.SECONDS)
 
                 .build();

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QuickPOS</string>
+    <string name="app_name">RetailExpert</string>
     <string name="title_activity_sales">SalesActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -9,8 +9,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_sales">Sales</string>
-    <string name="menu_orders">Orders</string>
-    <string name="menu_products">Products</string>
+    <string name="menu_orders">Bills</string>
 
 
     <!-- Verifone string data -->
@@ -203,7 +202,7 @@
     <string name="prn_comment3">""</string>
 
 
-<!--    Sales EPOS strings values-->
+    <!--    Sales EPOS strings values-->
     <string name="btn_add_item">Item</string>
     <string name="btn_add_client">client</string>
     <string name="btn_check_price">Price</string>
@@ -441,4 +440,8 @@
     <string name="sync_page">synchronization...</string>
     <string name="last_sync_time">\"The latest synchronization was: \"</string>
     <string name="cod_de_activare">Cod de activare</string>
+    <string name="title_shift_list">Shifts</string>
+    <string name="title_shift_detail">Shift Detail</string>
+
+    <string name="calculator_delete"><![CDATA[<-]]></string>
 </resources>

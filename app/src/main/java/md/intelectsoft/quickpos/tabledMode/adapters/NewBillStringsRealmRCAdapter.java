@@ -83,7 +83,7 @@ public class NewBillStringsRealmRCAdapter extends RealmRecyclerViewAdapter<BillS
             double existQuantity = string.getQuantity();
             existQuantity += 1 ;
 
-            double sum = string.getPrice() * existQuantity;
+            double sum = string.getBasePrice() * existQuantity;
             double sumWithDisc = string.getPriceWithDiscount() * existQuantity;
 
             MainTabledActivity.editLineCount(string,sumWithDisc,sum,existQuantity);
@@ -96,7 +96,7 @@ public class NewBillStringsRealmRCAdapter extends RealmRecyclerViewAdapter<BillS
             if(existQuantity - 1 > 0){
                 existQuantity -= 1;
 
-                double sum = string.getPrice() * existQuantity;
+                double sum = string.getBasePrice() * existQuantity;
                 double sumWithDisc = string.getPriceWithDiscount() * existQuantity;
 
                 MainTabledActivity.editLineCount(string,sumWithDisc,sum,existQuantity);
@@ -161,7 +161,7 @@ public class NewBillStringsRealmRCAdapter extends RealmRecyclerViewAdapter<BillS
                         }catch (Exception e){
                             quantity = Double.parseDouble(value.getText().toString().replace(",","."));
                         }
-                        double sum = string.getPrice() * quantity;
+                        double sum = string.getBasePrice() * quantity;
                         double sumWithDisc = string.getPriceWithDiscount() * quantity;
 
                         MainTabledActivity.editLineCount(string,sumWithDisc,sum,quantity);
@@ -275,8 +275,8 @@ public class NewBillStringsRealmRCAdapter extends RealmRecyclerViewAdapter<BillS
                 sum.setText(String.format("%.2f", billString.getSumWithDiscount()) + " MDL");
                 //TODO  add condition check if it is weight item
                 quantity.setText(String.format("%.2f", billString.getQuantity()).replace(",","."));
-                price.setText(String.format("%.2f", billString.getPrice()).replace(",","."));
-                discount.setText(String.format("%.2f", billString.getPrice() - billString.getPriceWithDiscount()).replace(",","."));
+                price.setText(String.format("%.2f", billString.getBasePrice()).replace(",","."));
+                discount.setText(String.format("%.2f", billString.getBasePrice() - billString.getPriceWithDiscount()).replace(",","."));
             }
         }
 

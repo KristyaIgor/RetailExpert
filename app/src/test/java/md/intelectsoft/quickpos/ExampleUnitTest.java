@@ -14,4 +14,11 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+    @Test
+    public void additiondsfrect() {
+        int max = Integer.MAX_VALUE;
+        int min = Integer.MIN_VALUE;
+        assertEquals(4, 2 + 2);
+    }
 }

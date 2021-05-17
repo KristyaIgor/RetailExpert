@@ -1,8 +1,5 @@
 package md.intelectsoft.quickpos.phoneMode.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -10,53 +7,73 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.zxing.Result;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+import io.realm.RealmList;
 import md.intelectsoft.quickpos.R;
 import md.intelectsoft.quickpos.Realm.localStorage.AssortmentRealm;
 import md.intelectsoft.quickpos.Realm.localStorage.Bill;
+import md.intelectsoft.quickpos.Realm.localStorage.BillString;
 import md.intelectsoft.quickpos.Realm.localStorage.History;
 import md.intelectsoft.quickpos.Realm.localStorage.Shift;
-import md.intelectsoft.quickpos.tabledMode.activity.FinancialRepTabledActivity;
 import md.intelectsoft.quickpos.utils.BaseEnum;
-import md.intelectsoft.quickpos.utils.POSApplication;
+import md.intelectsoft.quickpos.POSApplication;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefSettings;
+import static md.intelectsoft.quickpos.phoneMode.activity.MainActivityPhone.addToCart;
+import static md.intelectsoft.quickpos.phoneMode.activity.MainActivityPhone.salesViewModel;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefSettings;
 
 @SuppressLint("NonConstantResourceId")
 public class ScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler{
     private ZXingScannerView mScannerView;
-
-
     TimerTask timerTaskResumeScan;
     Timer timerResumeScan;
     private Context context;
     Realm mRealm;
     ZXingScannerView.ResultHandler handler;
-
-    private int counter = 0;
-
     String billId;
+
+    @BindView(R.id.btn_pay_bill_scan) MaterialButton buttonPay;
+    @BindView(R.id.order_line_list_scan) RecyclerView recyclerView;
+    @BindView(R.id.textNoLinesInScanActivity) TextView textNoLines;
 
     @OnClick(R.id.imageBackToSales) void onBack(){
         finish();
     }
+
+    @OnClick(R.id.btn_pay_bill_scan) void onPayContinue() {
+        Intent payIntent = new Intent(this, PaymentActivity.class);
+        payIntent.putExtra("id", billId);
+        startActivityForResult(payIntent, 111);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +87,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
         ButterKnife.bind(this);
         ButterKnife.setDebug(true);
-
+        //cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
         mRealm = Realm.getDefaultInstance();
 
         ViewGroup contentFrame = (ViewGroup) findViewById(R.id.content_frame);
@@ -82,6 +99,49 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         context = this;
         Intent intent = getIntent();
         billId = intent.getStringExtra("billId");
+
+        salesViewModel.getBillStrings().observe( this, billStringsList -> {
+            if(billStringsList.size() > 0) {
+                buttonPay.setVisibility(View.VISIBLE);
+                textNoLines.setVisibility(View.GONE);
+            }
+            else {
+                buttonPay.setVisibility(View.GONE);
+                textNoLines.setVisibility(View.VISIBLE);
+            }
+
+            recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(billStringsList));
+        });
+        if(billId != null)
+            salesViewModel.getBillStringList(billId);
+
+        salesViewModel.getBillEntry().observe(this, bill -> {
+            if(bill != null){
+                billId = bill.getId();
+                salesViewModel.getBillStringList(billId);
+
+                RealmList<BillString> lines = bill.getBillStrings();
+                int countLines = 0;
+                if(lines != null && lines.size() > 0) {
+                    for (BillString line : lines) {
+                        if (line.isAllowNonInteger()) {
+                            countLines += 1;
+                        } else
+                            countLines += line.getQuantity();
+                    }
+                    double sum = bill.getTotalDiscount();
+                    buttonPay.setText(countLines + " items = " + String.format("%.2f", sum).replace(",", "."));
+                }
+                else{
+
+                }
+            }
+            else{
+                billId = null;
+                buttonPay.setText("0 item = 0.00 MDL");
+            }
+
+        });
     }
 
     @Override
@@ -100,16 +160,15 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
     private void searchProductByBarcode (String barcode) {
         AssortmentRealm item = mRealm.where(AssortmentRealm.class).equalTo("barcodes.bar", barcode).findFirst();
-        counter = 0;
         if(item != null){
-            addProductsToBill(item);
+            addToCart(item);
 
             if (timerResumeScan != null)
                 timerResumeScan.cancel();
             timerResumeScan = new Timer();
 
             resumeScanBarcode();
-            timerResumeScan.schedule(timerTaskResumeScan, 1500);
+            timerResumeScan.schedule(timerTaskResumeScan, 1300);
         }
         else{
             new MaterialAlertDialogBuilder(context)
@@ -138,19 +197,6 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         };
     }
 
-    private void addProductsToBill(AssortmentRealm item) {
-        if(billId == null){
-            billId = UUID.randomUUID().toString();
-            if(!createNewBill(billId)){
-                billId = null;
-            }
-        }
-
-        if(billId != null){
-
-        }
-    }
-
     private boolean createNewBill(String billId) {
        boolean billCreated = false;
 
@@ -160,10 +206,10 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                 Bill newBill = new Bill();
                 newBill.setId(billId);
                 newBill.setCreateDate(new Date().getTime());
-                newBill.setAuthor(POSApplication.getApplication().getUser().getId());
-                newBill.setAuthorName(POSApplication.getApplication().getUser().getFullName());
-                newBill.setSumWithDiscount(0.0);
-                newBill.setSum(0.0);
+                newBill.setUserId(POSApplication.getApplication().getUser().getId());
+                newBill.setUserName(POSApplication.getApplication().getUser().getFullName());
+                newBill.setTotalDiscount(0.0);
+                newBill.setTotalSum(0.0);
                 newBill.setState(0);
                 newBill.setShiftId(lastOpenedShift.getId());
                 newBill.setSynchronized(false);
@@ -182,7 +228,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                     mRealm.insert(newBill);
                     History createdBill = new History();
                     createdBill.setDate(newBill.getCreateDate());
-                    createdBill.setMsg(context.getString(R.string.message_bill_created_nr) + newBill.getShiftReceiptNumSoftware());
+                    createdBill.setMsg(context.getString(R.string.message_bill_created_nr) + newBill.getShiftNumberSoftware());
                     createdBill.setType(BaseEnum.History_CreateBill);
                     mRealm.insert(createdBill);
                     billCreated = true;
@@ -205,5 +251,137 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         Log.v("TAG", rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
 
         searchProductByBarcode(rawResult.getText());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 111){
+            if(resultCode == RESULT_OK){
+                setResult(RESULT_OK);
+                finish();
+            }
+            else if(resultCode == 951){
+                setResult(951);
+                finish();
+            }
+        }
+    }
+
+    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+        private final List<BillString> mValues;
+        SimpleItemRecyclerViewAdapter(List<BillString> items) {
+            mValues = items;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.billstring_list_content, parent, false);
+            return new SimpleItemRecyclerViewAdapter.ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, int position) {
+            BillString item = mValues.get(position);
+
+            holder.name.setText(item.getAssortmentFullName());
+
+            if(!item.isDeleted()) {
+                boolean expanded = item.isExpanded();
+
+                holder.subItem.setVisibility(expanded ? View.VISIBLE : View.GONE);
+            }
+
+            holder.itemView.setOnClickListener(v -> {
+                holder.collapsOtherItems(position);
+                // Get the current state of the item
+                boolean expandeds = item.isExpanded();
+                // Change the state
+                item.setExpanded(!expandeds);
+
+                // Notify the adapter that item has changed
+                notifyItemChanged(position);
+            });
+
+            if(item.getQuantity() > 1){
+                holder.pricePerOne.setVisibility(View.VISIBLE);
+                long afterComma = Math.round((item.getQuantity() % 1) * 100);
+                if(afterComma > 0){
+                    holder.quantity.setText(String.format("%.2f", item.getQuantity()).replace(",", "."));
+                }else{
+                    holder.quantity.setText(String.format("%.0f", item.getQuantity()).replace(",", "."));
+                }
+
+                holder.pricePerOne.setText(String.format("%.2f", item.getPriceWithDiscount()).replace(",", ".") + " MDL");
+
+                holder.count.setText(String.format("%.0f", item.getQuantity()).replace(",", ".") + " items");
+
+            }
+            else {
+                holder.pricePerOne.setVisibility(View.GONE);
+                holder.quantity.setText(String.format("%.0f", item.getQuantity()).replace(",", "."));
+
+                holder.count.setText(String.format("%.0f", item.getQuantity()).replace(",", ".") + " item");
+            }
+
+            holder.price.setText(String.format("%.0f", item.getPriceWithDiscount()).replace(",", ".") + " MDL\nunit");
+
+            holder.sum.setText(String.format("%.2f", item.getSumWithDiscount()).replace(",", ".") + " MDL");
+
+            holder.remove.setOnClickListener(v -> {
+                salesViewModel.removeBillLine(item);
+                mValues.remove(position);
+                notifyItemRemoved(position);
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mValues.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            final TextView quantity;
+            final TextView name;
+            final TextView pricePerOne;
+            final TextView sum;
+            final ConstraintLayout subItem;
+            final Button count;
+            final Button price;
+            final Button remove;
+
+
+            ViewHolder(View view) {
+                super(view);
+                quantity = (TextView) view.findViewById(R.id.textLineCount);
+                name = (TextView) view.findViewById(R.id.textLineName);
+                pricePerOne = (TextView) view.findViewById(R.id.textLinePricePerOne);
+                sum = (TextView) view.findViewById(R.id.textLineTotalSum);
+                subItem = (ConstraintLayout) view.findViewById(R.id.layoutDetailProductCartAction);
+
+                count = (Button) view.findViewById(R.id.buttonCountItemsAdapterLine);
+                price = (Button) view.findViewById(R.id.buttonUnitPriceAdapterLine);
+                remove = (Button) view.findViewById(R.id.buttonRemoveItemAdapterLine);
+            }
+
+            private void collapsOtherItems(int position){
+                int allItems = getItemCount();
+                for(int i= 0; i < allItems; i++){
+                    if(i == position)
+                        continue;
+                    else{
+                        BillString billString = mValues.get(i);
+                        if(!billString.isDeleted()){
+                            boolean expand = billString.isExpanded();
+
+                            if(expand)
+                                billString.setExpanded(!expand);
+
+                            notifyItemChanged(i);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

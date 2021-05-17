@@ -12,6 +12,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/contactless" />
+            <option value="$PROJECT_DIR$/contactless-api-1.0.1" />
+            <option value="$PROJECT_DIR$/printer-api-0.1.1-rc0" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

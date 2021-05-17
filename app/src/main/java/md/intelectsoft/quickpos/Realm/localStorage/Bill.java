@@ -9,28 +9,32 @@ import io.realm.RealmObject;
 public class Bill extends RealmObject {
     private String id;
     private String shiftId;
-    private int shiftReceiptNumSoftware;
-    private int receiptNumFiscalMemory;
+    private int operationType;
+    private int shiftNumberSoftware;
+    private int shiftNumberFiscal;
+    private int globalNumber;
     private String discountCardId;
     private String discountCardNumber;
     private String deviceId;
     private long createDate;
-    private long closeDate;
-    private int state;  // 0 - opened , 1 - closed , 2 - deleted
+    private int state;                      // 0 - opened , 1 - closed
+    private boolean isDeleted;
     private String currentSoftwareVersion;
-    private String author;   //user id
-    private String authorName;   //user name
-    private double sumWithDiscount;
-    private double sum;
-    private boolean isSynchronized;
+    private String userId;
+    private String userName;
+    private int userCode;                //OperatorCode
+    private double totalDiscount;
+    private double totalSum;
     private RealmList<BillString> billStrings;
     private RealmList<BillPaymentType> billPaymentTypes;
     private String closedBy;
     private String closedByName;
+    private long closeDate;
     private String lastEditAuthor;
     private long lastEditDate;
-    private int inProcessOfSync;    //0 - este sincronizat cu succes , 1 - e in proces , 2 - nu este sincronizat
+    private int inProcessOfSync;            //0 - este sincronizat cu succes , 1 - e in proces , 2 - nu este sincronizat
     private boolean expanded;
+    private boolean isSynchronized;
 
     public String getId() {
         return id;
@@ -48,20 +52,21 @@ public class Bill extends RealmObject {
         this.shiftId = shiftId;
     }
 
-    public int getShiftReceiptNumSoftware() {
-        return shiftReceiptNumSoftware;
+
+    public int getShiftNumberSoftware() {
+        return shiftNumberSoftware;
     }
 
-    public void setShiftReceiptNumSoftware(int shiftReceiptNumSoftware) {
-        this.shiftReceiptNumSoftware = shiftReceiptNumSoftware;
+    public void setShiftNumberSoftware(int shiftNumberSoftware) {
+        this.shiftNumberSoftware = shiftNumberSoftware;
     }
 
-    public int getReceiptNumFiscalMemory() {
-        return receiptNumFiscalMemory;
+    public int getGlobalNumber() {
+        return globalNumber;
     }
 
-    public void setReceiptNumFiscalMemory(int receiptNumFiscalMemory) {
-        this.receiptNumFiscalMemory = receiptNumFiscalMemory;
+    public void setGlobalNumber(int globalNumber) {
+        this.globalNumber = globalNumber;
     }
 
     public String getDiscountCardId() {
@@ -120,28 +125,28 @@ public class Bill extends RealmObject {
         this.currentSoftwareVersion = currentSoftwareVersion;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public double getSumWithDiscount() {
-        return sumWithDiscount;
+    public double getTotalDiscount() {
+        return totalDiscount;
     }
 
-    public void setSumWithDiscount(double sumWithDiscount) {
-        this.sumWithDiscount = sumWithDiscount;
+    public void setTotalDiscount(double totalDiscount) {
+        this.totalDiscount = totalDiscount;
     }
 
-    public double getSum() {
-        return sum;
+    public double getTotalSum() {
+        return totalSum;
     }
 
-    public void setSum(double sum) {
-        this.sum = sum;
+    public void setTotalSum(double totalSum) {
+        this.totalSum = totalSum;
     }
 
     public boolean isSynchronized() {
@@ -208,12 +213,12 @@ public class Bill extends RealmObject {
         this.expanded = expanded;
     }
 
-    public String getAuthorName() {
-        return authorName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getClosedByName() {
@@ -222,5 +227,37 @@ public class Bill extends RealmObject {
 
     public void setClosedByName(String closedByName) {
         this.closedByName = closedByName;
+    }
+
+    public int getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(int operationType) {
+        this.operationType = operationType;
+    }
+
+    public int getShiftNumberFiscal() {
+        return shiftNumberFiscal;
+    }
+
+    public void setShiftNumberFiscal(int shiftNumberFiscal) {
+        this.shiftNumberFiscal = shiftNumberFiscal;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public int getUserCode() {
+        return userCode;
+    }
+
+    public void setUserCode(int userCode) {
+        this.userCode = userCode;
     }
 }

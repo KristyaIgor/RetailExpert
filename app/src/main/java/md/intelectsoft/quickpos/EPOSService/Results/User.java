@@ -96,7 +96,7 @@ public class User extends RealmObject {
     }
 
     public String getFullName() {
-        return firstName + " " + lastName;
+        return firstName != null ? firstName : "" + " " + lastName != null ? lastName : "";
     }
 
 }

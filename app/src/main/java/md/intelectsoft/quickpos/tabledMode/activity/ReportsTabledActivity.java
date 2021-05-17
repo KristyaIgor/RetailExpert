@@ -23,19 +23,17 @@ import com.datecs.fiscalprinter.SDK.model.DatecsFiscalDevice;
 import com.datecs.fiscalprinter.SDK.model.UserLayerV2.cmdReport;
 
 
-import md.intelectsoft.quickpos.EPOSService.EPOSRetrofitClient;
-import md.intelectsoft.quickpos.EPOSService.EposServiceAPI;
 import md.intelectsoft.quickpos.FiscalService.FiscalServiceAPI;
 import md.intelectsoft.quickpos.FiscalService.FiscalServiceRetrofitClient;
 import md.intelectsoft.quickpos.FiscalService.Result.SimpleResult;
 import md.intelectsoft.quickpos.R;
 import md.intelectsoft.quickpos.utils.BaseEnum;
-import md.intelectsoft.quickpos.utils.POSApplication;
+import md.intelectsoft.quickpos.POSApplication;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefSettings;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefSettings;
 
 public class ReportsTabledActivity extends AppCompatActivity {
     private DrawerLayout drawer;

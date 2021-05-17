@@ -1,12 +1,5 @@
 package md.intelectsoft.quickpos.tabledMode.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -48,6 +41,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.acs.smartcard.Reader;
 import com.acs.smartcard.ReaderException;
@@ -106,7 +106,7 @@ import md.intelectsoft.quickpos.tabledMode.connectors.UsbDeviceConnector;
 import md.intelectsoft.quickpos.tabledMode.datecs.PrinterManager;
 import md.intelectsoft.quickpos.utils.BaseEnum;
 import md.intelectsoft.quickpos.utils.LocaleHelper;
-import md.intelectsoft.quickpos.utils.POSApplication;
+import md.intelectsoft.quickpos.POSApplication;
 import md.intelectsoft.quickpos.utils.Rfc2898DerivesBytes;
 import md.intelectsoft.quickpos.utils.UpdateHelper;
 import md.intelectsoft.quickpos.utils.UpdateInformation;
@@ -114,8 +114,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefSettings;
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefWorkPlaceSettings;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefSettings;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefWorkPlaceSettings;
 
 public class AuthTabledActivity extends AppCompatActivity implements UpdateHelper.OnUpdateCheckListener {
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1, DATECS_USB_VID = 65520, FTDI_USB_VID = 1027;
@@ -1192,7 +1192,7 @@ public class AuthTabledActivity extends AppCompatActivity implements UpdateHelpe
         registerApplication.setWorkPlace(workPlaceName);
 
 
-        Call<RegisterApplication> getURICall = brokerServiceAPI.getURICall(registerApplication);
+        Call<RegisterApplication> getURICall = brokerServiceAPI.getURI(registerApplication);
 
         if (registerApp) {
             pgH.setMessage("Obtain Uri");

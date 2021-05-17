@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('printer-api-0.1.1-rc0.aar'))

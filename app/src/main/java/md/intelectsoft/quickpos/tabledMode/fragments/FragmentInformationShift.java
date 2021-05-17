@@ -36,14 +36,14 @@ import md.intelectsoft.quickpos.Realm.localStorage.History;
 import md.intelectsoft.quickpos.Realm.localStorage.Shift;
 import md.intelectsoft.quickpos.tabledMode.activity.ShiftsTabledActivity;
 import md.intelectsoft.quickpos.utils.BaseEnum;
-import md.intelectsoft.quickpos.utils.POSApplication;
+import md.intelectsoft.quickpos.POSApplication;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 import static md.intelectsoft.quickpos.tabledMode.activity.MainTabledActivity.datecsFiscalDevice;
-import static md.intelectsoft.quickpos.utils.POSApplication.SharedPrefSettings;
+import static md.intelectsoft.quickpos.POSApplication.SharedPrefSettings;
 
 /**
  * Created by Igor on 26.05.2020
@@ -175,8 +175,6 @@ public class FragmentInformationShift extends Fragment {
                 }
             }
         }
-
-
         tvCashSales.setText("MDL " + String.valueOf(sumOfCash));
         tvCardSales.setText("MDL " + String.valueOf(sumOfCard));
         tvOtherSales.setText("MDL " + String.valueOf(sumOfOther));

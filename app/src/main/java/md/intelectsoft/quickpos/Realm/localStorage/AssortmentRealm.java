@@ -14,8 +14,9 @@ public class AssortmentRealm extends RealmObject {
     private String parentID;
     private String marking;
     private String code;
+    private int cpvCode;
     private RealmList<Barcodes> barcodes = null;
-    private double price;
+    private double basePrice;
     private long priceLineStartDate;
     private long priceLineEndDate;
     private String priceLineId;
@@ -31,7 +32,17 @@ public class AssortmentRealm extends RealmObject {
     private double stockBalanceDate;
     private String unit;
     private double vat;
+    private String vatCode;
     private byte[] image;
+
+
+    public int getCpvCode() {
+        return cpvCode;
+    }
+
+    public void setCpvCode(int cpvCode) {
+        this.cpvCode = cpvCode;
+    }
 
     public String getId() {
         return id;
@@ -97,12 +108,12 @@ public class AssortmentRealm extends RealmObject {
         this.barcodes = barcodes;
     }
 
-    public double getPrice() {
-        return price;
+    public double getBasePrice() {
+        return basePrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setBasePrice(double basePrice) {
+        this.basePrice = basePrice;
     }
 
     public long getPriceLineStartDate() {
@@ -231,5 +242,13 @@ public class AssortmentRealm extends RealmObject {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public String getVatCode() {
+        return vatCode;
+    }
+
+    public void setVatCode(String vatCode) {
+        this.vatCode = vatCode;
     }
 }
